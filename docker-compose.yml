@@ -34,7 +34,7 @@ services:
   nginx:
     build: ./docker/images/nginx
     ports:
-      - "80:80"
+      - "8084:80"
     depends_on:
       - php
     volumes:
