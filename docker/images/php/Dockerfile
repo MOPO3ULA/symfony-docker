@@ -1,49 +1,38 @@
-FROM alpine:latest
+FROM php:7.3.11-fpm
 
-RUN apk add --update --no-cache \
-    coreutils \
-    php7-fpm \
-    php7-apcu \
-    php7-ctype \
-    php7-curl \
-    php7-dom \
-    php7-gd \
-    php7-iconv \
-    php7-imagick \
-    php7-json \
-    php7-intl \
-    php7-mcrypt \
-    php7-fileinfo\
-    php7-mbstring \
-    php7-opcache \
-    php7-openssl \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-mysqli \
-    php7-xml \
-    php7-zlib \
-    php7-phar \
-    php7-tokenizer \
-    php7-session \
-    php7-simplexml \
-    php7-xdebug \
-    php7-zip \
-    php7-xmlwriter \
-    make \
-    curl
+RUN apt-get update && apt-get install -y \
+        curl \
+        wget \
+        git \
+        unzip \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng-dev \
+        libzip-dev \
+    && pecl install xdebug mcrypt-1.0.3 \
+    && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip \
+    && docker-php-ext-enable iconv mcrypt mbstring mysqli pdo_mysql zip xdebug \
+    && docker-php-ext-configure gd --with-free
+
+RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini
+RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini
+RUN echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini
 
 RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-setup.php.sig \
-        && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
-        && php composer-setup.php && rm composer-setup.php* \
-        && chmod +x composer.phar && mv composer.phar /usr/bin/composer
+    && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
+    && php composer-setup.php && rm composer-setup.php* \
+    && chmod +x composer.phar && mv composer.phar /usr/bin/composer
 
 COPY symfony.ini /etc/php7/conf.d/
 COPY symfony.ini /etc/php7/cli/conf.d/
-COPY xdebug.ini  /etc/php7/conf.d/
+COPY xdebug.ini  /usr/local/etc/php7/conf.d/
 
 COPY symfony.pool.conf /etc/php7/php-fpm.d/
 
-CMD ["php-fpm7", "-F"]
+RUN usermod -u 1000 www-data
+
+CMD ["php-fpm"]
 
 WORKDIR /var/www/symfony
-EXPOSE 9001
+EXPOSE 9000
