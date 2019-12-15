@@ -1,4 +1,4 @@
-FROM php:7.3.11-fpm
+FROM php:7.4.0-fpm
 
 RUN apt-get update && apt-get install -y \
         curl \
@@ -10,15 +10,18 @@ RUN apt-get update && apt-get install -y \
         libmcrypt-dev \
         libpng-dev \
         libzip-dev \
+        libonig-dev \
     && pecl install xdebug mcrypt-1.0.3 \
     && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip opcache \
-    && docker-php-ext-enable iconv mcrypt mbstring mysqli pdo_mysql zip xdebug opcache \
-    && docker-php-ext-configure gd --with-free
+    && docker-php-ext-enable mcrypt xdebug opcache \
+    && docker-php-ext-configure gd
 
 RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini
 RUN echo 'extension=pdo_mysql.so' >> /usr/local/etc/php/php.ini
+#RUN echo 'opcache.preload_user=www-data' >> /usr/local/etc/php/php.ini
+#RUN echo 'opcache.preload=/var/www/symfony/var/cache/dev/srcApp_KernelDevDebugContainer.preload.php' >> /usr/local/etc/php/php.ini
 
 RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-setup.php.sig \
     && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
