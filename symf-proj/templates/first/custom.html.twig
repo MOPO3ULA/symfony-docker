@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FirstController!{% endblock %}
+
+{% block body %}
+<h1>Hello {{ name }}!</h1>
+
+This friendly message is coming from:
+<ul>
+    <li>Your controller at <code><a href="{{ '/home/dmitry/dev/symfony-docker/symf-proj/src/Controller/FirstController.php'|file_link(0) }}">src/Controller/FirstController.php</a></code></li>
+    <li>Your template at <code><a href="{{ '/home/dmitry/dev/symfony-docker/symf-proj/templates/first/index.html.twig'|file_link(0) }}">templates/first/index.html.twig</a></code></li>
+</ul>
+{% endblock %}

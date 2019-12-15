@@ -8,4 +8,5 @@
 /symf-proj/vendor/
 /mysql/
 /logs/
+/.idea/
 ###< symfony/framework-bundle ###
