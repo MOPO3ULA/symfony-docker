@@ -11,13 +11,14 @@ RUN apt-get update && apt-get install -y \
         libpng-dev \
         libzip-dev \
     && pecl install xdebug mcrypt-1.0.3 \
-    && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip \
-    && docker-php-ext-enable iconv mcrypt mbstring mysqli pdo_mysql zip xdebug \
+    && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip opcache \
+    && docker-php-ext-enable iconv mcrypt mbstring mysqli pdo_mysql zip xdebug opcache \
     && docker-php-ext-configure gd --with-free
 
 RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini
 RUN echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini
+RUN echo 'extension=pdo_mysql.so' >> /usr/local/etc/php/php.ini
 
 RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-setup.php.sig \
     && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
@@ -26,6 +27,7 @@ RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-set
 
 COPY symfony.ini /etc/php7/conf.d/
 COPY symfony.ini /etc/php7/cli/conf.d/
+COPY opcache.ini /usr/local/etc/php7/conf.d/
 COPY xdebug.ini  /usr/local/etc/php7/conf.d/
 
 COPY symfony.pool.conf /etc/php7/php-fpm.d/
