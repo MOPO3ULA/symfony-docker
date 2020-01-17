@@ -1,4 +1,4 @@
-FROM php:7.4.0-fpm
+FROM php:7.4.1-fpm
 
 RUN apt-get update && apt-get install -y \
         curl \
@@ -16,10 +16,17 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable mcrypt xdebug opcache \
     && docker-php-ext-configure gd
 
-RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini
-RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini
-RUN echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini
-RUN echo 'extension=pdo_mysql.so' >> /usr/local/etc/php/php.ini
+RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini \
+    && echo 'extension=pdo_mysql.so' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.interned_strings_buffer=8' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.max_accelerated_files=4000' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.revalidate_freq=60' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.fast_shutdown=1' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.enable_cli=1' >> /usr/local/etc/php/php.ini
+
 #RUN echo 'opcache.preload_user=www-data' >> /usr/local/etc/php/php.ini
 #RUN echo 'opcache.preload=/var/www/symfony/var/cache/dev/srcApp_KernelDevDebugContainer.preload.php' >> /usr/local/etc/php/php.ini
 
