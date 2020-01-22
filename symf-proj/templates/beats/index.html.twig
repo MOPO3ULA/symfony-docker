@@ -3,11 +3,10 @@
 {% block body %}
 
     <h1>Beats list</h1>
-    <h2>Random beats:</h2>
-    {% for beatNumber in beats %}
+    {% for beat in beats %}
         <p>
-            <a href="{{ path('beatsDetail', {id: beatNumber}) }}">
-                Beat #{{ beatNumber }}
+            <a href="{{ path('beatsDetail', {id: beat.getId() }) }}">
+                {{ beat.getTitle() }} by {{ beat.getUserId() }}
             </a>
         </p>
     {% endfor %}
