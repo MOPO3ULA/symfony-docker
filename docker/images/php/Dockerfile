@@ -19,7 +19,6 @@ RUN apt-get update && apt-get install -y \
 RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini \
     && echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini \
     && echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini \
-    && echo 'extension=pdo_mysql.so' >> /usr/local/etc/php/php.ini \
     && echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/php.ini \
     && echo 'opcache.interned_strings_buffer=8' >> /usr/local/etc/php/php.ini \
     && echo 'opcache.max_accelerated_files=4000' >> /usr/local/etc/php/php.ini \
