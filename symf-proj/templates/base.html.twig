@@ -22,7 +22,13 @@
                         <a class="nav-link" href="{{ path('beatsList') }}">Beats list</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('beatsList') }}">Page</a>
+                        <a class="nav-link" href="{{ path('categoriesList') }}">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('genresList') }}">Genres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('feedbackForm') }}">Feedback</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">Disabled</a>
@@ -43,6 +49,12 @@
             </div>
         </nav>
         <main role="main" class="container">
+            {% for flash in app.session.flashBag.get('success_feedback') %}
+                <div class="alert alert-success">
+                    {{ flash }}
+                </div>
+            {% endfor %}
+
             {% block body %}{% endblock %}
         </main>
 
