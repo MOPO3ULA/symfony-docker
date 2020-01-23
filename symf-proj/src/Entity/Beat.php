@@ -22,9 +22,9 @@ class Beat
     private $title;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="User")
      */
-    private $userId;
+    private $user;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -83,14 +83,21 @@ class Beat
         return $this;
     }
 
-    public function getUserId(): ?int
+    /**
+     * @return mixed
+     */
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(int $userId): self
+    /**
+     * @param mixed $user
+     * @return Beat
+     */
+    public function setUser($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }

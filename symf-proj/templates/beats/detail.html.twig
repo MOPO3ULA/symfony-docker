@@ -4,14 +4,21 @@
 
     <h1>Beat #{{ beat.getId() }}</h1>
     <ul>
-        <li>Author: {{ beat.getUserId() }}</li>
+        <li>Author: {{ beat.user.username }}</li>
         <li>Title: {{ beat.getTitle() }}</li>
         <li>Beat length: {{ beat.getBeatLength() }}</li>
+
         <li>Category:
-            <a href="{{ path('categoryDetail', {id: beat.getCategory().getId()}) }}">
-                {{ beat.getCategory().getName() }}</a>
+            <a href="{{ path('categoryDetail', {id: beat.category.id}) }}">
+                {{ beat.getCategory().getName() }}
+            </a>
         </li>
-        <li>Genre: {{ beat.getGenre().getName() }}</li>
+
+        <li>Genre:
+            <a href="{{ path('genreDetail', {id: beat.genre.id}) }}">
+                {{ beat.genre.name }}
+            </a>
+        </li>
 
         {% if beat.rating %}
             <li>Rating: {{ beat.getRating() }}</li>
@@ -24,4 +31,4 @@
 
 {% endblock body %}
 
-{% block title %}Beat by {{ beat.getUserId() }}{% endblock %}
+{% block title %}Beat by {{ beat.user.username }}{% endblock %}

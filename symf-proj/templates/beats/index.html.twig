@@ -5,8 +5,8 @@
     <h1>Beats list</h1>
     {% for beat in beats %}
         <p>
-            <a href="{{ path('beatsDetail', {id: beat.getId() }) }}">
-                {{ beat.getTitle() }} by {{ beat.getUserId() }}
+            <a href="{{ path('beatsDetail', {id: beat.id }) }}">
+                {{ beat.title }} by <b>{{ beat.user.username }}</b>
             </a>
         </p>
     {% endfor %}
