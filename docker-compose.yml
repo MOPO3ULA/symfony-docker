@@ -43,6 +43,7 @@ services:
       - php
     volumes:
       - ./logs/nginx/:/var/log/nginx
+      - ./symf-proj:/var/www/symfony
     networks:
       - backend
 

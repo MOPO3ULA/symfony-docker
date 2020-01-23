@@ -8,6 +8,7 @@
         "doctrine/annotations": "^1.8",
         "guzzlehttp/guzzle": "^6.4",
         "paquettg/php-html-parser": "^2.1",
+        "symfony/asset": "4.4.*",
         "symfony/console": "4.4.*",
         "symfony/css-selector": "4.4.*",
         "symfony/dom-crawler": "4.4.*",
@@ -21,6 +22,7 @@
         "symfony/twig-pack": "^1.0",
         "symfony/validator": "4.4.*",
         "symfony/var-dumper": "4.4.*",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "4.4.*"
     },
     "require-dev": {

@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
         libpng-dev \
         libzip-dev \
         libonig-dev \
+        gnupg \
     && pecl install xdebug mcrypt-1.0.3 \
     && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip opcache \
     && docker-php-ext-enable mcrypt xdebug opcache \
@@ -33,6 +34,11 @@ RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-set
     && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
     && php composer-setup.php && rm composer-setup.php* \
     && chmod +x composer.phar && mv composer.phar /usr/bin/composer
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y yarn
 
 COPY symfony.ini /etc/php7/conf.d/
 COPY symfony.ini /etc/php7/cli/conf.d/
