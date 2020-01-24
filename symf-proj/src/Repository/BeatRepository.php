@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Beat;
 use App\Entity\Category;
 use App\Entity\Genre;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -49,6 +50,16 @@ class BeatRepository extends ServiceEntityRepository
             ->setParameter('genre', $genre)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findBeatsByUser(User $user)
+    {
+        return $this->createQueryBuilder('beat')
+            ->where('beat.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Beat;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,6 +22,37 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    public function findAllBeatsByUsername(string $username)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('b.title')
+            ->addSelect('b.id')
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->leftJoin(Beat::class, 'b', Join::WITH, 'b.user = u.id')
+            ->groupBy('b.title')
+            ->addGroupBy('b.id')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @param string $username
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
+    public function findUserByUsername(string $username)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getSingleResult()
+        ;
     }
 
     /**

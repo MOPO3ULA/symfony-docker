@@ -10,7 +10,6 @@
             <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon/favicon-16x16.png') }}">
             <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon/favicon.ico') }}">
             <link rel="manifest" href="{{ asset('images/favicon/site.webmanifest') }}">
-            <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/examples/starter-template/starter-template.css">
         {% endblock %}
     </head>
     <body>
@@ -35,6 +34,9 @@
                         <a class="nav-link" href="{{ path('feedbackForm') }}">Feedback</a>
                     </li>
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('detailUser', {'username': app.user.username}) }}">My account</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
                         </li>

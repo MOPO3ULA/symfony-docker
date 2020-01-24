@@ -4,7 +4,11 @@
 
     <h1>Beat #{{ beat.getId() }}</h1>
     <ul>
-        <li>Author: {{ beat.user.username }}</li>
+        <li>Author:
+            <a href="{{ path('detailUser', {'username': beat.user.username}) }}">
+                {{ beat.user.username }}
+            </a>
+        </li>
         <li>Title: {{ beat.getTitle() }}</li>
         <li>Beat length: {{ beat.getBeatLength() }}</li>
 

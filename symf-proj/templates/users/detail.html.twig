@@ -1,0 +1,32 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    {% if beats %}
+        <h1>Beats by {{ user.username }}</h1>
+
+        <ul>
+        {% for beat in beats %}
+            <li>
+                <p>
+                    <a href="{{ path('beatsDetail', {'id': beat.id}) }}">
+                        {{ beat.title }}
+                    </a>
+                </p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>К сожалению, у
+            {% if app.user.id == user.id %}
+                тебя
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+            ещё нет битов :(
+        </p>
+    {% endif %}
+
+{% endblock body %}
+
+{% block title %}{{ user.username }}{% endblock %}

@@ -6,7 +6,11 @@
     {% for beat in beats %}
         <p>
             <a href="{{ path('beatsDetail', {id: beat.id }) }}">
-                {{ beat.title }} by <b>{{ beat.user.username }}</b>
+                {{ beat.title }}
+            </a>
+            by
+            <a href="{{ path('detailUser', {'username': beat.user.username}) }}">
+                <b>{{ beat.user.username }}</b>
             </a>
         </p>
     {% endfor %}
