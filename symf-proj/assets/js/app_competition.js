@@ -17,3 +17,5 @@ import '../css/app.css';
 var $ = require('jquery');
 window.$ = $;
 window.jQuery = $;
+
+require('./player.js');

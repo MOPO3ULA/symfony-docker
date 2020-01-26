@@ -1,0 +1,52 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h5 class="card-header">
+            {{ beat.title }}
+            <span class="fa fa-play js-btn-play float-right" id="wave-player"></span>
+        </h5>
+        <div class="card-body">
+            <div id="waveform"></div>
+            {#<div>#}
+                {#<span id="time-current">0.00</span>#}
+            {#</div>#}
+        </div>
+    </div>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Author:
+            <a href="{{ beat.user.link }}" target="_blank">
+                {{ beat.user.username }}
+            </a>
+        </li>
+        <li class="list-group-item">Beat length: {{ beat.length }}</li>
+
+        <li class="list-group-item">Category:
+            <a href="#">
+                {{ beat.category }}
+            </a>
+        </li>
+
+        <li class="list-group-item">Genre:
+            <a href="#">
+                {{ beat.genre }}
+            </a>
+        </li>
+        {% if beat.description %}
+            <li class="list-group-item">Description: {{ beat.description }}</li>
+        {% endif %}
+
+        <audio controls hidden class="audio">
+            <source src="{{ beat.link }}">
+        </audio>
+    </ul>
+
+{% endblock body %}
+
+{% block title %}{{ beat.title }}{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app_competition') }}
+{% endblock %}

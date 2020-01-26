@@ -28,7 +28,7 @@ services:
   php:
     build: ./docker/images/php
     volumes:
-      - ./symf-proj:/var/www/symfony:cached
+      - ./symf-proj:/var/www/symfony
       - ./logs/symfony:/var/www/symfony/app/logs
     environment:
       XDEBUG_CONFIG: "remote_host=10.0.2.2 remote_port=9001 remote_enable=1"
