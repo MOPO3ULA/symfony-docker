@@ -1,0 +1,9 @@
+version: '2'
+syncs:
+  app-sync:
+    src: './symf-proj/'
+    sync_host_ip: 'auto'
+    sync_host_port: 10872
+    sync_strategy: 'unison'
+    sync_excludes: ['.gitignore','.idea','node_modules','vendor','bin','.git','*.coffee','*.scss','*.sass','*.log']
+    host_disk_mount_mode: 'cached'

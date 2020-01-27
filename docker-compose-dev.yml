@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:5.7
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: symfony4_beats
+    networks:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: 123
+    networks:
+      - backend
+
+  php:
+    build: ./docker/images/php
+    volumes:
+      - app-sync:/var/www/symfony:nocopy
+      - ./logs/symfony:/var/www/symfony/app/logs
+    environment:
+      XDEBUG_CONFIG: "remote_host=10.0.2.2 remote_port=9001 remote_enable=1"
+    networks:
+      - backend
+
+  nginx:
+    build: ./docker/images/nginx
+    ports:
+      - "8084:80"
+    depends_on:
+      - php
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+      - app-sync:/var/www/symfony:nocopy
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: "bridge"
+
+volumes:
+  app-sync:
+    external: true
