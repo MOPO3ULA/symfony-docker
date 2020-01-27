@@ -9,4 +9,5 @@
 /mysql/
 /logs/
 /.idea/
+/.docker-sync/
 ###< symfony/framework-bundle ###
