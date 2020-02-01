@@ -3,6 +3,8 @@
 namespace App\Parse;
 
 
+use App\Entity\Category;
+use App\Entity\Genre;
 use App\Validate\CompetitionValidator;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -14,9 +16,15 @@ class CompetitionParser extends BaseParser
         'category',
         'size',
         'type',
-        'key',
+        'keyCreatedWith',
         'createdWith'
     ];
+
+    private const classReference = [
+        'genre' => Genre::class,
+        'category' => Category::class
+    ];
+
     private const tagWordToCut = [
         'bpm' => ' bpm',
         'genre' => ' Loops',
@@ -43,10 +51,11 @@ class CompetitionParser extends BaseParser
     {
         $audioBlock = $this->crawler->filter('.player-wrapper')->first();
 
+        $beatParameters['loopermanLink'] = $this->getLoopermanLink();
         $beatParameters['link'] = $this->getLink($audioBlock);
         $beatParameters['title'] = $this->getTitle();
         $beatParameters['user'] = [
-            'username' => $this->getUsername(),
+            'name' => $this->getUsername(),
             'link' => $this->getUserLink()
         ];
         $beatParameters['length'] = $this->getLength($audioBlock);
@@ -68,6 +77,11 @@ class CompetitionParser extends BaseParser
         }
 
         return $beatParameters;
+    }
+
+    private function getLoopermanLink(): string
+    {
+        return $this->crawler->getUri();
     }
 
     private function getLink(Crawler $audioBlock): string

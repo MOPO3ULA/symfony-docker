@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
+use App\Entity\Competition;
 use App\Parse\CompetitionParser;
 use App\Validate\CompetitionValidator;
 use GuzzleHttp\Client;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CompetitionModel
 {
@@ -35,7 +35,7 @@ class CompetitionModel
      */
     private $crawler;
 
-    public function getRandomBeat(): array
+    public function getRandomBeat(): Competition
     {
         $this->setClient(new Client(['base_uri' => self::link]));
 
@@ -69,10 +69,31 @@ class CompetitionModel
             $htmlDetailBeat = $this->getPage();
             $this->setCrawler(new CompetitionParser($htmlDetailBeat));
 
-            return $this->crawler->getBeatParameters();
+            $competition = new Competition();
+            $beatParameters = $this->crawler->getBeatParameters();
+            $competition = $this->addBeatParameters($competition, $beatParameters);
+
+            return $competition;
         }
 
         return $this->getRandomBeat();
+    }
+
+    public function addBeatParameters(Competition $competition, array $beatParameters): Competition
+    {
+        foreach ($beatParameters as $parameter => $parameterValue) {
+            if (is_array($parameterValue)) {
+                foreach ($parameterValue as $param => $paramValue) {
+                    $methodName = 'set' . lcfirst($parameter . $param);
+                    $competition->$methodName($paramValue);
+                }
+            } else if ($parameter !== 'genre' && $parameter !== 'category') {
+                $methodName = 'set' . lcfirst($parameter);
+                $competition->$methodName($parameterValue);
+            }
+        }
+
+        return $competition;
     }
 
     /**

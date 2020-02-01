@@ -1,43 +1,49 @@
 import WaveSurfer from "wavesurfer.js";
 
+/*
 function padNum(num) {
-    return num.toString().padStart(2,0);
+    return num.toString().padStart(2, 0);
 }
+*/
 
 let waveColor = '#80bae0';
 let progressColor = '#6b6fbd';
 let stopColor = 'gray';
 
-var wavesurfer = WaveSurfer.create({
-    container: '#waveform',
-    waveColor: waveColor,
-    progressColor: progressColor,
-    normalize: true,
-    pixelRatio: 1
-});
+let sampleLinks = $('audio').children();
 
-let sampleSrc = $('audio').children().first().attr('src');
+$('div.card').each(function (index) {
+    let idIndex = index + 1;
+    let surfer = window['wavesurfer' + idIndex];
 
-wavesurfer.load(
-    'https://cors-anywhere.herokuapp.com/' + sampleSrc
-);
+    surfer = WaveSurfer.create({
+        container: '#waveform-' + idIndex,
+        waveColor: waveColor,
+        progressColor: progressColor,
+        normalize: true,
+        pixelRatio: 1
+    });
 
-wavesurfer.on('pause', function () {
-    wavesurfer.setProgressColor(stopColor);
-    $('#wave-player').removeClass('fa-pause').addClass('fa-play');
-});
+    surfer.load(sampleLinks[index].src);
 
-wavesurfer.on('play', function () {
-    wavesurfer.setProgressColor(progressColor);
-    $('#wave-player').removeClass('fa-play').addClass('fa-pause');
-});
+    surfer.on('pause', function () {
+        surfer.setProgressColor(stopColor);
+        $('#wave-player-'+idIndex).removeClass('fa-pause').addClass('fa-play');
+    });
 
-$(".js-btn-play").on('click', function (event) {
-    if (wavesurfer.isPlaying()) {
-        wavesurfer.pause();
-    } else {
-        wavesurfer.play();
-    }
+    surfer.on('play', function () {
+        surfer.setProgressColor(progressColor);
+        $('#wave-player-'+idIndex).removeClass('fa-play').addClass('fa-pause');
+    });
+
+
+    $("#wave-player-"+idIndex).on('click', function (event) {
+        if (surfer.isPlaying()) {
+            surfer.pause();
+        } else {
+            surfer.play();
+        }
+    });
 });
 
 /*

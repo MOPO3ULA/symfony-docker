@@ -2,50 +2,71 @@
 
 {% block body %}
 
-    <div class="card">
-        <h5 class="card-header">
-            {{ beat.title }}
-            <span class="fa fa-play js-btn-play float-right" id="wave-player"></span>
-        </h5>
-        <div class="card-body">
-            <div id="waveform"></div>
-            {#<div>#}
-                {#<span id="time-current">0.00</span>#}
-            {#</div>#}
-        </div>
-    </div>
+    {% if competitions %}
+        {% for competition in competitions %}
+            <div class="card m-5">
+                <h5 class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            {{ competition.title }}
+                        </div>
 
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Author:
-            <a href="{{ beat.user.link }}" target="_blank">
-                {{ beat.user.username }}
-            </a>
-        </li>
-        <li class="list-group-item">Beat length: {{ beat.length }}</li>
+                        <div class="col-lg-1 text-center">
+                            <a href="javascript:">
+                                <span class="fa fa-play js-btn-play" id="wave-player-{{ loop.index }}"></span>
+                            </a>
+                        </div>
+                    </div>
+                </h5>
+                <div class="card-body">
+                    <div id="waveform-{{ loop.index }}"></div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Author:
+                        <a href="{{ competition.userLink }}" target="_blank">
+                            {{ competition.userName }}
+                        </a>
+                    </li>
+                    <li class="list-group-item">Beat length: {{ competition.length }}</li>
 
-        <li class="list-group-item">Category:
-            <a href="#">
-                {{ beat.category }}
-            </a>
-        </li>
+                    {% if competition.category %}
+                        <li class="list-group-item">Category:
+                            <a href="#">
+                                {{ competition.category.name }}
+                            </a>
+                        </li>
+                    {% endif %}
 
-        <li class="list-group-item">Genre:
-            <a href="#">
-                {{ beat.genre }}
-            </a>
-        </li>
-        {% if beat.description %}
-            <li class="list-group-item">Description: {{ beat.description }}</li>
-        {% endif %}
+                    {% if competition.genre %}
+                        <li class="list-group-item">Genre:
+                            <a href="#">
+                                {{ competition.genre.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if competition.description %}
+                        <li class="list-group-item">Description: {{ competition.description }}</li>
+                    {% endif %}
+                    <li class="list-group-item">
+                        <a type="button" href="#" class="btn btn-outline-success">Принять участие</a>
+                        <a type="button" href="#" class="btn btn-outline-info">Подробнее</a>
 
-        <audio controls hidden class="audio">
-            <source src="{{ beat.link }}">
-        </audio>
-    </ul>
+                        <a href="{{ competition.loopermanLink }}" target="_blank" class="btn btn-link">
+                            Оригинальный пост
+                        </a>
+                    </li>
+
+                    <audio controls hidden class="audio">
+                        <source src="{{ competition.link }}">
+                    </audio>
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
 
 {% endblock body %}
 
-{% block title %}{{ beat.title }}{% endblock %}
+{% block title %}Список соревнований{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app_competition') }}

@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Beat;
-use App\Model\CompetitionModel;
-use App\Repository\BeatRepository;
+use App\Entity\Competition;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,11 +15,11 @@ class CompetitionController extends AbstractController
      */
     public function index(): Response
     {
-        $competitionModel = new CompetitionModel();
-        $beat = $competitionModel->getRandomBeat();
+        $competitionRepository = $this->getDoctrine()->getRepository(Competition::class);
+        $competitionsList = $competitionRepository->findAll();
 
         return $this->render('@TwigTemplate/competition/index.html.twig', [
-            'beat' => $beat
+            'competitions' => $competitionsList
         ]);
     }
 }
