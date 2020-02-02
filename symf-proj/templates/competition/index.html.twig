@@ -4,7 +4,7 @@
 
     {% if competitions %}
         {% for competition in competitions %}
-            <div class="card m-5">
+            <div class="card m-5" id="competition-{{ loop.index }}">
                 <h5 class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
@@ -48,11 +48,13 @@
                         <li class="list-group-item">Description: {{ competition.description }}</li>
                     {% endif %}
                     <li class="list-group-item">
-                        <a type="button" href="#" class="btn btn-outline-success">Принять участие</a>
-                        <a type="button" href="#" class="btn btn-outline-info">Подробнее</a>
+                        <a type="button" href="#" class="btn btn-outline-success"
+                           data-toggle="modal" data-target="#modal-submit-{{ loop.index }}">Join competition</a>
+
+                        <a type="button" href="#" class="btn btn-outline-info">More</a>
 
                         <a href="{{ competition.loopermanLink }}" target="_blank" class="btn btn-link">
-                            Оригинальный пост
+                            Original post
                         </a>
                     </li>
 
@@ -61,12 +63,57 @@
                     </audio>
                 </ul>
             </div>
+
+            <!-- Modal -->
+            <div id="modal-submit-{{ loop.index }}" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header align-items-center">
+                            <h4 class="modal-title">Join competition</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <form id="sample-modal-form-{{ loop.index }}" action="javascript:" class="competition-form"
+                              method="post">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="textTitle-{{ loop.index }}">Title</label>
+                                    <input class="form-control" name="title" id="textTitle-{{ loop.index }}"
+                                           type="text">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="textDescription-{{ loop.index }}">Description</label>
+                                    <textarea class="form-control" name="description"
+                                              id="textDescription-{{ loop.index }}" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="custom-file form-control">
+                                        <label class="custom-file-label" for="customFile-{{ loop.index }}">Choose
+                                            file</label>
+                                        <input type="file" name="file" class="custom-file-input"
+                                               id="customFile-{{ loop.index }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="submit" class="btn btn-outline-success col-lg-3">Submit</button>
+                                <button type="button" class="btn btn-outline-danger d-none d-lg-block col-lg-2"
+                                        data-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
     {% endif %}
 
 {% endblock body %}
 
-{% block title %}Список соревнований{% endblock %}
+{% block title %}Competition list{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app_competition') }}

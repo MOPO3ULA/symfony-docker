@@ -19,3 +19,4 @@ window.$ = $;
 window.jQuery = $;
 
 require('./player.js');
+require('./competition.js');
