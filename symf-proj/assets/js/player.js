@@ -11,12 +11,13 @@ let progressColor = '#6b6fbd';
 let stopColor = 'gray';
 
 let sampleLinks = $('audio').children();
+let cards = $('div.card');
+let countOfCards = cards.length;
 
-$('div.card').each(function (index) {
+cards.each(function (index) {
     let idIndex = index + 1;
-    let surfer = window['wavesurfer' + idIndex];
 
-    surfer = WaveSurfer.create({
+    let surfer = WaveSurfer.create({
         container: '#waveform-' + idIndex,
         waveColor: waveColor,
         progressColor: progressColor,
@@ -24,20 +25,23 @@ $('div.card').each(function (index) {
         pixelRatio: 1
     });
 
+    window['wavesurfer' + idIndex] = surfer;
+
     surfer.load(sampleLinks[index].src);
 
     surfer.on('pause', function () {
         surfer.setProgressColor(stopColor);
-        $('#wave-player-'+idIndex).removeClass('fa-pause').addClass('fa-play');
+        $('#wave-player-' + idIndex).removeClass('fa-pause').addClass('fa-play');
     });
 
     surfer.on('play', function () {
+        stopOtherTracks(idIndex);
+
         surfer.setProgressColor(progressColor);
-        $('#wave-player-'+idIndex).removeClass('fa-play').addClass('fa-pause');
+        $('#wave-player-' + idIndex).removeClass('fa-play').addClass('fa-pause');
     });
 
-
-    $("#wave-player-"+idIndex).on('click', function (event) {
+    $("#wave-player-" + idIndex).on('click', function () {
         if (surfer.isPlaying()) {
             surfer.pause();
         } else {
@@ -45,6 +49,20 @@ $('div.card').each(function (index) {
         }
     });
 });
+
+/**
+ * Останавливаем все активные треки, кроме текущего
+ * @param ind
+ */
+function stopOtherTracks(ind) {
+    for (let i = 1; i <= countOfCards; ++i) {
+        if (ind !== i) {
+            if (window['wavesurfer' + i].isPlaying()) {
+                window['wavesurfer' + i].pause();
+            }
+        }
+    }
+}
 
 /*
 wavesurfer.on('audioprocess', function() {
