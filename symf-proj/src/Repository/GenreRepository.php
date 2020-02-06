@@ -36,6 +36,21 @@ class GenreRepository extends ServiceEntityRepository
         return $q->getQuery()->getResult();
     }
 
+    /**
+     * @param $name
+     * @return Genre|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findGenreByName($name): ?Genre
+    {
+        return $this->createQueryBuilder('g')
+            ->where('g.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     // /**
     //  * @return Genre[] Returns an array of Genre objects
     //  */

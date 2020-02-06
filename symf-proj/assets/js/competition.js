@@ -9,8 +9,12 @@ $('.competition-form').each(function (index) {
     $('#sample-modal-form-'+ind).submit(function (e) {
         e.preventDefault();
 
+        let postLink = $('#original-post-' + ind).attr('href');
+
         let form = $('#sample-modal-form-'+ind);
         let fd = new FormData(form[0]);
+
+        fd.append('postLink', postLink);
 
         $.ajax({
             type: 'POST',

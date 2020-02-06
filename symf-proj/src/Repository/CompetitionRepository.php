@@ -19,6 +19,21 @@ class CompetitionRepository extends ServiceEntityRepository
         parent::__construct($registry, Competition::class);
     }
 
+    /**
+     * @param string $link
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findCompetitionByPostLink(string $link)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.loopermanLink = :link')
+            ->setParameter('link', $link)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     // /**
     //  * @return Competition[] Returns an array of Competition objects
     //  */

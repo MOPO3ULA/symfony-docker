@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Competition;
+use App\Service\CompetitionGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,21 +29,29 @@ class CompetitionController extends AbstractController
     /**
      * @Route("/competition/submit", name="competitionSubmit")
      * @param Request $request
+     * @param CompetitionGenerator $competitionGenerator
      * @return Response
      */
-    public function validateSubmittingBeat(Request $request): ?Response
+    public function submitBeat(Request $request, CompetitionGenerator $competitionGenerator): ?Response
     {
-        /**
-         * @var UploadedFile $file
-         */
-        $file = $request->files->get('file');
-
-        $saveDestination = $this->getParameter('kernel.project_dir').'/public/upload';
-        $originalFilename = $file->getClientOriginalName();
-        $file->move($saveDestination, $originalFilename);
+        $success = $competitionGenerator->saveUserBeat($request);
 
         return new JsonResponse(
-            ['success' => true]
+            ['success' => $success]
+        );
+    }
+
+    /**
+     * @Route("/competition/create", name="competitionCreate")
+     * @param CompetitionGenerator $competitionGenerator
+     * @return Response
+     */
+    public function createCompetition(CompetitionGenerator $competitionGenerator): ?Response
+    {
+        $isCompetitionCreated = $competitionGenerator->createCompetition();
+
+        return new JsonResponse(
+            ['success' => $isCompetitionCreated]
         );
     }
 }

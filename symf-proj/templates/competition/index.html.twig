@@ -23,29 +23,29 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Author:
-                        <a href="{{ competition.userLink }}" target="_blank">
-                            {{ competition.userName }}
+                        <a href="{{ competition.sample.userLink }}" target="_blank">
+                            {{ competition.sample.userName }}
                         </a>
                     </li>
-                    <li class="list-group-item">Beat length: {{ competition.length }}</li>
+                    <li class="list-group-item">Beat length: {{ competition.sample.length }}</li>
 
-                    {% if competition.category %}
+                    {% if competition.sample.category %}
                         <li class="list-group-item">Category:
-                            <a href="#">
-                                {{ competition.category.name }}
+                            <a href="{{ path('categoryDetail', {id: competition.sample.category.id}) }}">
+                                {{ competition.sample.category.name }}
                             </a>
                         </li>
                     {% endif %}
 
-                    {% if competition.genre %}
+                    {% if competition.sample.genre %}
                         <li class="list-group-item">Genre:
-                            <a href="#">
-                                {{ competition.genre.name }}
+                            <a href="{{ path('genreDetail', {id: competition.sample.genre.id}) }}">
+                                {{ competition.sample.genre.name }}
                             </a>
                         </li>
                     {% endif %}
-                    {% if competition.description %}
-                        <li class="list-group-item">Description: {{ competition.description }}</li>
+                    {% if competition.sample.description %}
+                        <li class="list-group-item">Description: {{ competition.sample.description }}</li>
                     {% endif %}
                     <li class="list-group-item">
                         <a type="button" href="#" class="btn btn-outline-success"
@@ -53,13 +53,14 @@
 
                         <a type="button" href="#" class="btn btn-outline-info">More</a>
 
-                        <a href="{{ competition.loopermanLink }}" target="_blank" class="btn btn-link">
+                        <a href="{{ competition.loopermanLink }}" target="_blank" class="btn btn-link"
+                        id="original-post-{{ loop.index }}">
                             Original post
                         </a>
                     </li>
 
                     <audio controls hidden class="audio">
-                        <source src="{{ competition.link }}">
+                        <source src="{{ competition.sample.file }}">
                     </audio>
                 </ul>
             </div>

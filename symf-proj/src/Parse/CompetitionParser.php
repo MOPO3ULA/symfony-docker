@@ -3,14 +3,21 @@
 namespace App\Parse;
 
 
-use App\Entity\Category;
-use App\Entity\Genre;
 use App\Validate\CompetitionValidator;
 use Symfony\Component\DomCrawler\Crawler;
 
-class CompetitionParser extends BaseParser
+class CompetitionParser
 {
-    private const tagsReferences = [
+    private const neededTags = [
+        'bpm',
+        'genre',
+        'category',
+        'size',
+        'keyCreatedWith',
+        'createdWith'
+    ];
+
+    private const allTags = [
         'bpm',
         'genre',
         'category',
@@ -20,17 +27,24 @@ class CompetitionParser extends BaseParser
         'createdWith'
     ];
 
-    private const classReference = [
-        'genre' => Genre::class,
-        'category' => Category::class
-    ];
+    /**
+     * @var Crawler $crawler
+     */
+    public $crawler;
 
     private const tagWordToCut = [
         'bpm' => ' bpm',
         'genre' => ' Loops',
         'category' => ' Loops',
-        'key' => 'Key : '
+        'keyCreatedWith' => 'Key : '
     ];
+
+    public function setCrawler(string $htmlContent): CompetitionParser
+    {
+        $this->crawler = new Crawler($htmlContent);
+
+        return $this;
+    }
 
     public function getHtmlCountOfSamples(): string
     {
@@ -47,19 +61,18 @@ class CompetitionParser extends BaseParser
         return $element->getAttribute('href');
     }
 
-    public function getBeatParameters(): array
+    public function getSampleParameters(): array
     {
         $audioBlock = $this->crawler->filter('.player-wrapper')->first();
 
-        $beatParameters['loopermanLink'] = $this->getLoopermanLink();
-        $beatParameters['link'] = $this->getLink($audioBlock);
-        $beatParameters['title'] = $this->getTitle();
-        $beatParameters['user'] = [
+        $sampleParameters['file'] = $this->getLink($audioBlock);
+        $sampleParameters['title'] = $this->getTitle();
+        $sampleParameters['user'] = [
             'name' => $this->getUsername(),
             'link' => $this->getUserLink()
         ];
-        $beatParameters['length'] = $this->getLength($audioBlock);
-        $beatParameters['description'] = $this->getDescription();
+        $sampleParameters['length'] = $this->getLength($audioBlock);
+        $sampleParameters['description'] = $this->getDescription();
 
         $tagsString = $this->getTags();
 
@@ -69,19 +82,24 @@ class CompetitionParser extends BaseParser
         foreach ($tagsString as $key => $tag) {
             $tagText = $tag->textContent;
 
-            if (array_key_exists(self::tagsReferences[$key], self::tagWordToCut)) {
-                $tagText = str_replace(self::tagWordToCut[self::tagsReferences[$key]], '', $tagText);
+            if (in_array(self::allTags[$key], self::neededTags, true)) {
+                if (array_key_exists(self::allTags[$key], self::tagWordToCut)) {
+                    $tagText = str_replace(self::tagWordToCut[self::allTags[$key]], '', $tagText);
+                    $sampleParameters[self::allTags[$key]] = $tagText;
+                } else {
+                    $sampleParameters[self::allTags[$key]] = $tagText;
+                }
             }
-
-            $beatParameters[self::tagsReferences[$key]] = $tagText;
         }
 
-        return $beatParameters;
+        return $sampleParameters;
     }
 
-    private function getLoopermanLink(): string
+    public function getLoopermanLink(): string
     {
-        return $this->crawler->getUri();
+        return CompetitionValidator::validateString(
+            $this->crawler->filter('.player-title')->attr('href')
+        );
     }
 
     private function getLink(Crawler $audioBlock): string

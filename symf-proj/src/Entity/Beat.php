@@ -37,7 +37,7 @@ class Beat
     private $fileUrl;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="string")
      */
     private $beatLength;
 
@@ -56,14 +56,37 @@ class Beat
      */
     private $genre;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Competition")
+     */
+    private $competition;
+
+    /**
+     * @return mixed
+     */
+    public function getCompetition()
+    {
+        return $this->competition;
+    }
+
+    /**
+     * @param mixed $competition
+     */
+    public function setCompetition($competition): void
+    {
+        $this->competition = $competition;
+    }
+
     public function getGenre(): Genre
     {
         return $this->genre;
     }
 
-    public function setGenre($genre): void
+    public function setGenre(?Genre $genre): self
     {
         $this->genre = $genre;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -126,12 +149,12 @@ class Beat
         return $this;
     }
 
-    public function getBeatLength(): ?float
+    public function getBeatLength(): ?string
     {
         return $this->beatLength;
     }
 
-    public function setBeatLength(float $beatLength): self
+    public function setBeatLength(string $beatLength): self
     {
         $this->beatLength = $beatLength;
 
@@ -155,7 +178,7 @@ class Beat
         return $this->category;
     }
 
-    public function setCategory(string $category): self
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 
