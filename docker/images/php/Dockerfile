@@ -1,4 +1,4 @@
-FROM php:7.4.0-fpm
+FROM php:7.4.1-fpm
 
 RUN apt-get update && apt-get install -y \
         curl \
@@ -11,15 +11,22 @@ RUN apt-get update && apt-get install -y \
         libpng-dev \
         libzip-dev \
         libonig-dev \
+        gnupg \
     && pecl install xdebug mcrypt-1.0.3 \
     && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip opcache \
     && docker-php-ext-enable mcrypt xdebug opcache \
     && docker-php-ext-configure gd
 
-RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini
-RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini
-RUN echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini
-RUN echo 'extension=pdo_mysql.so' >> /usr/local/etc/php/php.ini
+RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini \
+    && echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.interned_strings_buffer=8' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.max_accelerated_files=4000' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.revalidate_freq=60' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.fast_shutdown=1' >> /usr/local/etc/php/php.ini \
+    && echo 'opcache.enable_cli=1' >> /usr/local/etc/php/php.ini
+
 #RUN echo 'opcache.preload_user=www-data' >> /usr/local/etc/php/php.ini
 #RUN echo 'opcache.preload=/var/www/symfony/var/cache/dev/srcApp_KernelDevDebugContainer.preload.php' >> /usr/local/etc/php/php.ini
 
@@ -27,6 +34,11 @@ RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-set
     && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
     && php composer-setup.php && rm composer-setup.php* \
     && chmod +x composer.phar && mv composer.phar /usr/bin/composer
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y yarn
 
 COPY symfony.ini /etc/php7/conf.d/
 COPY symfony.ini /etc/php7/cli/conf.d/

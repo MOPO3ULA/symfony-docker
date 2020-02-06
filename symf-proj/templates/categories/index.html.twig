@@ -1,0 +1,16 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    <h1>Categories</h1>
+    {% for category in categories %}
+        <p>
+            <a href="{{ path('categoryDetail', {id: category.id }) }}">
+                {{ category.name }} ({{ category.count }})
+            </a>
+        </p>
+    {% endfor %}
+
+{% endblock body %}
+
+{% block title %}Categories{% endblock %}

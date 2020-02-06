@@ -1,0 +1,20 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    <h1>Beats list</h1>
+    {% for beat in beats %}
+        <p>
+            <a href="{{ path('beatsDetail', {id: beat.id }) }}">
+                {{ beat.title }}
+            </a>
+            by
+            <a href="{{ path('detailUser', {'username': beat.user.username}) }}">
+                <b>{{ beat.user.username }}</b>
+            </a>
+        </p>
+    {% endfor %}
+
+{% endblock body %}
+
+{% block title %}Beats list{% endblock %}

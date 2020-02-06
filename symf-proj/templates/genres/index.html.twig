@@ -1,0 +1,16 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    <h1>Genres</h1>
+    {% for genre in genres %}
+        <p>
+            <a href="{{ path('genreDetail', {id: genre.id }) }}">
+                {{ genre.name }} ({{ genre.count }})
+            </a>
+        </p>
+    {% endfor %}
+
+{% endblock body %}
+
+{% block title %}Genres{% endblock %}

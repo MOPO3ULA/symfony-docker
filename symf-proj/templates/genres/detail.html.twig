@@ -1,0 +1,20 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    <h1>{{ genre.getName() }}</h1>
+    {% if beats %}
+        {% for beat in beats %}
+            <p>
+                <a href="{{ path('beatsDetail', {'id': beat.getId()}) }}">
+                    {{ beat.getTitle() }}
+                </a>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>К сожалению, данная категория пуста</p>
+    {% endif %}
+
+{% endblock body %}
+
+{% block title %}{{ genre.getName() }}{% endblock %}

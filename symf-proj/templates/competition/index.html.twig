@@ -1,0 +1,121 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    {% if competitions %}
+        {% for competition in competitions %}
+            <div class="card m-5" id="competition-{{ loop.index }}">
+                <h5 class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            {{ competition.title }}
+                        </div>
+
+                        <div class="col-lg-1 text-center">
+                            <a href="javascript:">
+                                <span class="fa fa-play js-btn-play" id="wave-player-{{ loop.index }}"></span>
+                            </a>
+                        </div>
+                    </div>
+                </h5>
+                <div class="card-body">
+                    <div id="waveform-{{ loop.index }}"></div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Author:
+                        <a href="{{ competition.sample.userLink }}" target="_blank">
+                            {{ competition.sample.userName }}
+                        </a>
+                    </li>
+                    <li class="list-group-item">Beat length: {{ competition.sample.length }}</li>
+
+                    {% if competition.sample.category %}
+                        <li class="list-group-item">Category:
+                            <a href="{{ path('categoryDetail', {id: competition.sample.category.id}) }}">
+                                {{ competition.sample.category.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if competition.sample.genre %}
+                        <li class="list-group-item">Genre:
+                            <a href="{{ path('genreDetail', {id: competition.sample.genre.id}) }}">
+                                {{ competition.sample.genre.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if competition.sample.description %}
+                        <li class="list-group-item">Description: {{ competition.sample.description }}</li>
+                    {% endif %}
+                    <li class="list-group-item">
+                        <a type="button" href="#" class="btn btn-outline-success"
+                           data-toggle="modal" data-target="#modal-submit-{{ loop.index }}">Join competition</a>
+
+                        <a type="button" href="#" class="btn btn-outline-info">More</a>
+
+                        <a href="{{ competition.loopermanLink }}" target="_blank" class="btn btn-link"
+                        id="original-post-{{ loop.index }}">
+                            Original post
+                        </a>
+                    </li>
+
+                    <audio controls hidden class="audio">
+                        <source src="{{ competition.sample.file }}">
+                    </audio>
+                </ul>
+            </div>
+
+            <!-- Modal -->
+            <div id="modal-submit-{{ loop.index }}" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header align-items-center">
+                            <h4 class="modal-title">Join competition</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <form id="sample-modal-form-{{ loop.index }}" action="javascript:" class="competition-form"
+                              method="post">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="textTitle-{{ loop.index }}">Title</label>
+                                    <input class="form-control" name="title" id="textTitle-{{ loop.index }}"
+                                           type="text">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="textDescription-{{ loop.index }}">Description</label>
+                                    <textarea class="form-control" name="description"
+                                              id="textDescription-{{ loop.index }}" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="custom-file form-control">
+                                        <label class="custom-file-label" for="customFile-{{ loop.index }}">Choose
+                                            file</label>
+                                        <input type="file" name="file" class="custom-file-input"
+                                               id="customFile-{{ loop.index }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="submit" class="btn btn-outline-success col-lg-3">Submit</button>
+                                <button type="button" class="btn btn-outline-danger d-none d-lg-block col-lg-2"
+                                        data-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock body %}
+
+{% block title %}Competition list{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app_competition') }}
+{% endblock %}
