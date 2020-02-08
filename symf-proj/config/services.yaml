@@ -34,5 +34,13 @@ services:
         autowire: true
         public: false
         arguments:
-            $logger: '@monolog.logger.super'
+            $logger: '@monolog.logger.default'
+
+    App\Service\RegisterUserService:
+        autowire: true
+        public: false
+        arguments:
+            $logger: '@monolog.logger.registration'
+
+
 

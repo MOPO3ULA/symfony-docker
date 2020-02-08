@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Service\RegisterUserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -23,16 +26,39 @@ class SecurityController extends AbstractController
      * @var UserPasswordEncoderInterface
      */
     private UserPasswordEncoderInterface $passwordEncoder;
+    /**
+     * @var RegisterUserService
+     */
+    private RegisterUserService $registerUserService;
+    /**
+     * @var TokenStorageInterface
+     */
+    private TokenStorageInterface $tokenStorage;
+    /**
+     * @var SessionInterface
+     */
+    private SessionInterface $session;
 
     /**
      * SecurityController constructor.
      * @param TranslatorInterface $translator
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param RegisterUserService $registerUserService
+     * @param TokenStorageInterface $tokenStorage
+     * @param SessionInterface $session
      */
-    public function __construct(TranslatorInterface $translator, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(
+        TranslatorInterface $translator,
+        UserPasswordEncoderInterface $passwordEncoder,
+        RegisterUserService $registerUserService,
+        TokenStorageInterface $tokenStorage,
+        SessionInterface $session)
     {
         $this->translator = $translator;
         $this->passwordEncoder = $passwordEncoder;
+        $this->registerUserService = $registerUserService;
+        $this->tokenStorage = $tokenStorage;
+        $this->session = $session;
     }
 
     /**
@@ -47,7 +73,7 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+
             $user->setPassword(
                 $this->passwordEncoder->encodePassword(
                     $user,
@@ -55,15 +81,14 @@ class SecurityController extends AbstractController
                 )
             );
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->registerUserService->register($user);
 
             // do anything else you need here, like send an email\
 
+            //todo: Можно это вынести в симфонячий ивет так та, но мне было лень((((
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-            $this->container->get('security.token_storage')->setToken($token);
-            $this->container->get('session')->set('_security_main', serialize($token));
+            $this->tokenStorage->setToken($token);
+            $this->session->set('_security_main', serialize($token));
 
             $this->addFlash('success', $this->translator->trans("register.success"));
 

@@ -7,9 +7,12 @@ monolog:
     handlers:
         main:
             type: rotating_file
-            #1
-            path: "/var/www/symfony/log/123.log"
+            path: "/var/www/symfony/log/default.log"
             level: info
-            #2
-            channels: ["super"]
+            channels: ["default"]
+        registration:
+            type: rotating_file
+            path: "/var/www/symfony/log/registration.log"
+            level: info
+            channels: ["registration"]
 
