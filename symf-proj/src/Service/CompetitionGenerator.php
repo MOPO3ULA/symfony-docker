@@ -10,6 +10,8 @@ use App\Parse\CompetitionParser;
 use App\Repository\CategoryRepository;
 use App\Repository\CompetitionRepository;
 use App\Repository\GenreRepository;
+use App\Utils\Util;
+use App\Validate\FileValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -93,7 +95,11 @@ class CompetitionGenerator
         $this->parameterBag = $parameterBag;
     }
 
-    public function saveUserBeat(Request $request): bool
+    /**
+     * @param Request $request
+     * @return bool|string
+     */
+    public function saveUserBeat(Request $request)
     {
         $beat = new Beat();
         $this->competitionRepository = $this->managerRegistry->getRepository(Competition::class);
@@ -102,6 +108,11 @@ class CompetitionGenerator
          * @var UploadedFile $file
          */
         $file = $request->files->get('file');
+        $validationResult = FileValidator::validateMp3($file);
+
+        if (is_string($validationResult)) {
+            return $validationResult;
+        }
 
         $saveDestination = $this->parameterBag->get('kernel.project_dir') . '/public/upload/beats/';
         $originalFilename = $file->getClientOriginalName();

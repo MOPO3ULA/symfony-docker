@@ -34,10 +34,21 @@ class CompetitionController extends AbstractController
      */
     public function submitBeat(Request $request, CompetitionGenerator $competitionGenerator): ?Response
     {
+        $status = 'success';
+        $errorMessage = '';
+
         $success = $competitionGenerator->saveUserBeat($request);
 
+        if (is_string($success)) {
+            $status = 'error';
+            $errorMessage = $success;
+        }
+
         return new JsonResponse(
-            ['success' => $success]
+            [
+                'status' => $status,
+                'error' => $errorMessage
+            ]
         );
     }
 

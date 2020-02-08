@@ -1,4 +1,4 @@
-$(".custom-file-input").on("change", function() {
+$(".custom-file-input").on("change", function () {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
@@ -6,12 +6,12 @@ $(".custom-file-input").on("change", function() {
 $('.competition-form').each(function (index) {
     let ind = index + 1;
 
-    $('#sample-modal-form-'+ind).submit(function (e) {
+    $('#sample-modal-form-' + ind).submit(function (e) {
         e.preventDefault();
 
         let postLink = $('#original-post-' + ind).attr('href');
 
-        let form = $('#sample-modal-form-'+ind);
+        let form = $('#sample-modal-form-' + ind);
         let fd = new FormData(form[0]);
 
         fd.append('postLink', postLink);
@@ -25,10 +25,16 @@ $('.competition-form').each(function (index) {
             cache: false,
             data: fd,
             success: function (response) {
-
+                if (response.status === 'success') {
+                    $('#modal-submit-' + ind).modal('hide');
+                } else {
+                    let errorDiv = $('#error-' + ind);
+                    errorDiv.removeClass('is-hidden');
+                    errorDiv.text(response.error);
+                }
             },
-            error: function (response) {
-
+            error: function (xhr, status, error) {
+                $('#error-' + ind).text(error);
             }
         })
     });
