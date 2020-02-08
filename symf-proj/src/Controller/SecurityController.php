@@ -19,19 +19,28 @@ class SecurityController extends AbstractController
      * @var TranslatorInterface
      */
     private TranslatorInterface $translator;
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private UserPasswordEncoderInterface $passwordEncoder;
 
-    public function __construct(TranslatorInterface $translator)
+    /**
+     * SecurityController constructor.
+     * @param TranslatorInterface $translator
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     */
+    public function __construct(TranslatorInterface $translator, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->translator = $translator;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
      * @Route("/register", name="app_register")
      * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -40,7 +49,7 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-                $passwordEncoder->encodePassword(
+                $this->passwordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -56,7 +65,7 @@ class SecurityController extends AbstractController
             $this->container->get('security.token_storage')->setToken($token);
             $this->container->get('session')->set('_security_main', serialize($token));
 
-            $this->addFlash('success', $this->translator->trans("messages.register.success"));
+            $this->addFlash('success', $this->translator->trans("register.success"));
 
             return $this->redirectToRoute('beatsList');
         }
