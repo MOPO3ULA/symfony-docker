@@ -11,9 +11,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SecurityController extends AbstractController
 {
+    /**
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @Route("/register", name="app_register")
      * @param Request $request
@@ -45,7 +56,7 @@ class SecurityController extends AbstractController
             $this->container->get('security.token_storage')->setToken($token);
             $this->container->get('session')->set('_security_main', serialize($token));
 
-            $this->addFlash('success', 'Thank you for register!');
+            $this->addFlash('success', $this->translator->trans("messages.register.success"));
 
             return $this->redirectToRoute('beatsList');
         }
@@ -61,7 +72,7 @@ class SecurityController extends AbstractController
      */
     public function logout(): void
     {
-        throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
+        throw new \Exception($this->translator->trans("exceptions.blank_method"));
     }
 
     /**
