@@ -13,9 +13,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UsersController extends AbstractController
 {
+    /**
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @Route("/users/{username}", name="detailUser")
      * @param Request $request
@@ -25,13 +36,13 @@ class UsersController extends AbstractController
     {
         $username = $request->get('username');
 
-        /*** @var $userRepository UserRepository*/
+        /*** @var $userRepository UserRepository */
         $userRepository = $this->getDoctrine()->getRepository(User::class);
 
         try {
             $user = $userRepository->findUserByUsername($username);
         } catch (NoResultException $e) {
-            throw new NotFoundHttpException('Такого пользователя не существует');
+            throw new NotFoundHttpException($this->translator->trans("exceptions.users_not_found"));
         } catch (NonUniqueResultException $e) {
             //Если вдруг найдется несколько одинаковых никнеймов, то берем первый найденный
             $user = reset($user);

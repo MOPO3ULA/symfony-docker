@@ -26,8 +26,13 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    App\Controller\SecurityController:
+        autowire: true
+        public: false
+
     App\Controller\CompetitionController:
         autowire: true
         public: false
         arguments:
             $logger: '@monolog.logger.super'
+

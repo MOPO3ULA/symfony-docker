@@ -1,0 +1,7 @@
+messages:
+  register:
+    success: "Thank you for register!"
+
+exceptions:
+  blank_method: "This method can be blank - it will be intercepted by the logout key on your firewall"
+  users_not_found: "Users not found"
