@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class ContainDigit extends Constraint
+class ContainDigits extends Constraint
 {
     public $message = 'Должно содержать цифры';
 

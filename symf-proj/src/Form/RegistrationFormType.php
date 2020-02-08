@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Validate\Constraints\ContainDigit;
+use App\Validate\Constraints\ContainDigits;
 use App\Validate\Constraints\Email;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -58,7 +58,7 @@ class RegistrationFormType extends AbstractType
                         'minMessage' => $this->translator->trans('register.form_validation.password.password_length', ['%length%' => 6]),
                         'max' => 4096,
                     ]),
-                    new ContainDigit(['message' => $this->translator->trans('register.form_validation.password.contain_digits')])
+                    new ContainDigits(['message' => $this->translator->trans('register.form_validation.password.contain_digits')])
                 ],
             ]);
     }
