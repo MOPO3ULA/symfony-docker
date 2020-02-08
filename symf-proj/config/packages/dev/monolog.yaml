@@ -15,4 +15,9 @@ monolog:
             path: "/var/www/symfony/log/registration.log"
             level: info
             channels: ["registration"]
+        mailing:
+            type: rotating_file
+            path: "/var/www/symfony/log/mail.log"
+            level: info
+            channels: ["mailer"]
 
