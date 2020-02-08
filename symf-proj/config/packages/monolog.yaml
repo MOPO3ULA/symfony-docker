@@ -1,0 +1,3 @@
+#channels
+monolog:
+  channels: ['super']
