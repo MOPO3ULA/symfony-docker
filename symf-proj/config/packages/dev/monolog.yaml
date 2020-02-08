@@ -1,0 +1,15 @@
+#1)Sets the path and file name.
+#Output was like <name>-<date>.log
+#2)Sets the channel. Create or use exist
+#Finds created channels in /config/packages/monolog.yaml
+#3)Add constructor, pass LoggerInterface and add argument in services.yaml
+monolog:
+    handlers:
+        main:
+            type: rotating_file
+            #1
+            path: "/var/www/symfony/log/123.log"
+            level: info
+            #2
+            channels: ["super"]
+
