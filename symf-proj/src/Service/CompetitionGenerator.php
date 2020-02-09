@@ -18,6 +18,7 @@ use App\Entity\Competition;
 use App\Validate\CompetitionValidator;
 use Exception;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,6 +77,11 @@ class CompetitionGenerator
      */
     private Security $security;
 
+    /**
+     * @var LoggerInterface $logger
+     */
+    private LoggerInterface $logger;
+
     private bool $isRandomFound = false;
 
     public const parameterWhen = [
@@ -94,7 +100,7 @@ class CompetitionGenerator
 
     public function __construct(ManagerRegistry $managerRegistry, CompetitionParser $crawler,
                                 EntityManagerInterface $em, File $file, ParameterBagInterface $parameterBag,
-                                Security $security)
+                                Security $security, LoggerInterface $logger)
     {
         $this->managerRegistry = $managerRegistry;
         $this->crawler = $crawler;
@@ -102,6 +108,7 @@ class CompetitionGenerator
         $this->file = $file;
         $this->parameterBag = $parameterBag;
         $this->security = $security;
+        $this->logger = $logger;
     }
 
     /**
@@ -121,6 +128,7 @@ class CompetitionGenerator
         $validationResult = FileValidator::validateMp3($file);
 
         if (is_string($validationResult)) {
+            $this->logger->error($validationResult, ['class' => static::class]);
             return $validationResult;
         }
 
@@ -151,6 +159,7 @@ class CompetitionGenerator
             $beat->setCategory($category);
             $beat->setGenre($genre);
         } catch (NonUniqueResultException $e) {
+            $this->logger->error($e->getMessage(), [$e->getTraceAsString()]);
             return false;
         }
 
@@ -160,6 +169,7 @@ class CompetitionGenerator
             $this->em->persist($beat);
             $this->em->flush();
         } catch (Throwable $exception) {
+            $this->logger->error('Ошибка записи Beat в базу', ['class' => static::class]);
             return false;
         }
 
