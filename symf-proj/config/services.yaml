@@ -48,5 +48,11 @@ services:
         arguments:
             $logger: '@monolog.logger.mailer'
 
+    App\Service\MailServices\RegistrationMailService:
+        autowire: true
+        public: false
+        arguments:
+            $logger: '@monolog.logger.mailer'
+
 
 

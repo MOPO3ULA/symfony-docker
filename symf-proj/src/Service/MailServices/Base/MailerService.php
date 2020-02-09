@@ -33,10 +33,16 @@ abstract class MailerService implements IMailer
     /**
      * @inheritDoc
      */
-    public function send()
+    public function send(string $email)
     {
-        // TODO: Implement send() method.
+        //todo: more logic/logging/validating/change functions arguments?
+        //todo: add logging in database?
+        try {
+            $this->internalSend($email);
+        } catch (\Throwable $exception) {
+            $this->logger->error($exception->getMessage(), ['class:' => get_called_class(), 'line:' => $exception->getLine()]);
+        }
     }
 
-    abstract function internalSend();
+    protected abstract function internalSend(string $email);
 }

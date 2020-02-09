@@ -41,8 +41,8 @@ class UserRegistrationSubscriber implements EventSubscriberInterface
      */
     public function onRegisteredNewUserOnSite(SendEmailNotificationEvent $event)
     {
-        if ($event->getUserDomain()->getId()) {
-            $this->mailService->send();
+        if ($event->getUserEmail()) {
+            $this->mailService->send($event->getUserEmail());
         }
     }
 }

@@ -4,27 +4,26 @@
 namespace App\Events;
 
 
-use App\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class SendEmailNotificationEvent extends Event
 {
     /**
-     * @var User
+     * @var string
      */
-    private User $user;
+    private string $userEmail;
 
     /**
      * SendEmailNotificationEvent constructor.
-     * @param User $user
+     * @param string $userEmail
      */
-    public function __construct(User $user)
+    public function __construct(string $userEmail)
     {
-        $this->user = $user;
+        $this->userEmail = $userEmail;
     }
 
-    public function getUserDomain() : User
+    public function getUserEmail(): string
     {
-        return $this->user;
+        return $this->userEmail;
     }
 }

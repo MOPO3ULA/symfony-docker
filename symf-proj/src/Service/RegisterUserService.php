@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Events\SendEmailNotificationEvent;
+use App\Utils\Util;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -45,7 +46,7 @@ class RegisterUserService
     {
         try {
             $this->entityManager->persist($user);
-            $this->dispatcher->dispatch(new SendEmailNotificationEvent($user));
+            $this->dispatcher->dispatch(new SendEmailNotificationEvent($user->getEmail()));
         } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
         } finally {

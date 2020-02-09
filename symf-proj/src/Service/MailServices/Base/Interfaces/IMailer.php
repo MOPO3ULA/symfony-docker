@@ -10,5 +10,5 @@ interface IMailer
      * Отправка письма
      * @return mixed
      */
-    public function send();
+    public function send(string $email);
 }
