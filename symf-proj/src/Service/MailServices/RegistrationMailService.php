@@ -7,8 +7,8 @@ namespace App\Service\MailServices;
 use App\Repository\UserRepository;
 use App\Service\MailServices\Base\MailerService;
 use Psr\Log\LoggerInterface;
-use stringEncode\Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class RegistrationMailService extends MailerService
 {
@@ -17,12 +17,18 @@ class RegistrationMailService extends MailerService
      */
     private UserRepository $repository;
 
-    public function __construct(LoggerInterface $logger, TranslatorInterface $translator, UserRepository $repository)
+    private $user;
+
+    public function __construct(LoggerInterface $logger, TranslatorInterface $translator, UserRepository $repository, Environment $twig)
     {
 
         $this->logger = $logger;
         $this->translator = $translator;
         parent::__construct($this->logger, $this->translator);
+
+        $twig->render(
+            'templates/emails/registration/registration.html.twig'
+        );
 
         $this->repository = $repository;
     }
@@ -30,10 +36,9 @@ class RegistrationMailService extends MailerService
     /**
      * Send registration email
      * @param string $email
-     * @throws Exception
      */
     protected function internalSend(string $email)
     {
-
+        $this->user = $this->repository->findOneBy(['email' => $email]);
     }
 }

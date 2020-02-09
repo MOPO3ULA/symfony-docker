@@ -6,6 +6,7 @@ namespace App\Service\MailServices\Base;
 
 use App\Service\MailServices\Base\Interfaces\IMailer;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class MailerService implements IMailer
