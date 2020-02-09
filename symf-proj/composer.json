@@ -1,6 +1,8 @@
 {
+    "name": "symfony-docker-project/mopo3ula",
+    "description": "Test symfony and docker project - beat competitions",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": "^7.4.1",
         "ext-ctype": "*",
