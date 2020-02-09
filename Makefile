@@ -12,7 +12,7 @@ endif
 
 stop:
 ifeq ($(OS),Darwin)
-	docker-compose stop
+	docker-compose down
 	docker-sync stop
 else
 	docker-compose stop
