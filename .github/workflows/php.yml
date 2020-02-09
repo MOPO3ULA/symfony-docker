@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - run: cd symf-proj
+        
     - uses: actions/checkout@v2
 
     - name: Validate composer.json and composer.lock
