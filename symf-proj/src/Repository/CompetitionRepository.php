@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Competition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Competition|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,17 +22,16 @@ class CompetitionRepository extends ServiceEntityRepository
 
     /**
      * @param string $link
-     * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return Competition|null
+     * @throws NonUniqueResultException
      */
-    public function findCompetitionByPostLink(string $link)
+    public function findCompetitionByPostLink(string $link): ?Competition
     {
         return $this->createQueryBuilder('c')
             ->where('c.loopermanLink = :link')
             ->setParameter('link', $link)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     // /**

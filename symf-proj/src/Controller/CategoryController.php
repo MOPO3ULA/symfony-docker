@@ -20,7 +20,7 @@ class CategoryController extends AbstractController
     public function index(): Response
     {
         /**
-         * @var $categoriesRepository CategoryRepository
+         * @var CategoryRepository $categoriesRepository
          */
         $categoriesRepository = $this->getDoctrine()->getRepository(Category::class);
         $categoriesList = $categoriesRepository->getCategoriesWithCountOfBeats();
@@ -38,17 +38,17 @@ class CategoryController extends AbstractController
     public function show(Request $request): Response
     {
         /**
-         * @var $categoriesRepository CategoryRepository
+         * @var CategoryRepository $categoriesRepository
          */
         $categoriesRepository = $this->getDoctrine()->getRepository(Category::class);
 
         /**
-         * @var $beatsRepository BeatRepository
+         * @var BeatRepository $beatsRepository
          */
         $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
 
         /**
-         * @var $category Category
+         * @var Category $category
          */
         $category = $categoriesRepository->find($request->get('id'));
 

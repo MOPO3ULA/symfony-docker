@@ -43,7 +43,7 @@ class CompetitionGenerator
     private EntityManagerInterface $em;
 
     /**
-     * @var $client Client
+     * @var Client $client
      */
     private Client $client;
 
@@ -109,6 +109,7 @@ class CompetitionGenerator
         $this->parameterBag = $parameterBag;
         $this->security = $security;
         $this->logger = $logger;
+        $this->competitionRepository = $this->managerRegistry->getRepository(Competition::class);
     }
 
     /**
@@ -119,7 +120,6 @@ class CompetitionGenerator
     {
         $beat = new Beat();
         $beat->setUser($this->security->getUser());
-        $this->competitionRepository = $this->managerRegistry->getRepository(Competition::class);
 
         /**
          * @var UploadedFile $file
@@ -148,7 +148,9 @@ class CompetitionGenerator
         $postLink = $request->request->get('postLink');
 
         try {
-            /*** @var Competition $competition */
+            /**
+             * @var Competition $competition
+             */
             $competition = $this->competitionRepository->findCompetitionByPostLink($postLink);
 
             $sample = $competition->getSample();
@@ -222,6 +224,7 @@ class CompetitionGenerator
         $this->crawler = $this->crawler->setCrawler($htmlContent);
 
         $countSample = $this->getCountOfSamples();
+        $beatLink = '';
 
         if ($countSample) {
             while (!$this->isRandomFound) {
@@ -351,7 +354,7 @@ class CompetitionGenerator
         $beatLink = null;
 
         /**
-         * @var $sample \DOMElement
+         * @var \DOMElement $sample
          */
         foreach ($samplesOnPage as $key => $sample) {
             if ($key === $sampleNumber) {
@@ -375,12 +378,12 @@ class CompetitionGenerator
     }
 
     /**
-     * @param $download
-     * @param $pathToSave
+     * @param string|null $download
+     * @param string $pathToSave
      * @param string $filename
      * @return string
      */
-    private function saveSample($download, $pathToSave, string $filename = ''): string
+    private function saveSample(?string $download, string $pathToSave, string $filename = ''): string
     {
         return $this->file->saveFile($download, $pathToSave, $filename);
     }

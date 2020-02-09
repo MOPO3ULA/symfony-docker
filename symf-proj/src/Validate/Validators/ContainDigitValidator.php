@@ -16,9 +16,12 @@ class ContainDigitValidator extends ConstraintValidator
      * @param mixed $value
      * @param Constraint $constraint
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!preg_match('/[\d]+/', $value)) {
+            /**
+             * @var mixed $constraint ->message
+             */
             $this->context->buildViolation($constraint->message)->addViolation();
         }
     }
