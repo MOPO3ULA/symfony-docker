@@ -10,4 +10,4 @@ make start
 cd symf-proj/
 composer update
 
-rm var/cache/dev
+rm -rf var/cache/dev
