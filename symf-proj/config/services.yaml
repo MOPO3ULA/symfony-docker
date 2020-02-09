@@ -42,5 +42,11 @@ services:
         arguments:
             $logger: '@monolog.logger.registration'
 
+    App\Service\CompetitionGenerator:
+        autowire: true
+        public: false
+        arguments:
+            $logger: '@monolog.logger.submit_beat'
+
 
 
