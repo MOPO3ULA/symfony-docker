@@ -14,11 +14,11 @@ jobs:
     - name: Change directory
       run: cd symf-proj/
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate
-
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
