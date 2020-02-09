@@ -6,7 +6,7 @@ namespace App\Utils;
 class Util
 {
     /**
-     * @param $message
+     * @param mixed $message
      * @param string $file
      * @param bool $backtrace
      */
