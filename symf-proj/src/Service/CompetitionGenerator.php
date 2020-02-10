@@ -18,6 +18,7 @@ use App\Entity\Competition;
 use App\Validate\CompetitionValidator;
 use Exception;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +43,7 @@ class CompetitionGenerator
     private EntityManagerInterface $em;
 
     /**
-     * @var $client Client
+     * @var Client $client
      */
     private Client $client;
 
@@ -76,6 +77,11 @@ class CompetitionGenerator
      */
     private Security $security;
 
+    /**
+     * @var LoggerInterface $logger
+     */
+    private LoggerInterface $logger;
+
     private bool $isRandomFound = false;
 
     public const parameterWhen = [
@@ -94,7 +100,7 @@ class CompetitionGenerator
 
     public function __construct(ManagerRegistry $managerRegistry, CompetitionParser $crawler,
                                 EntityManagerInterface $em, File $file, ParameterBagInterface $parameterBag,
-                                Security $security)
+                                Security $security, LoggerInterface $logger)
     {
         $this->managerRegistry = $managerRegistry;
         $this->crawler = $crawler;
@@ -102,6 +108,13 @@ class CompetitionGenerator
         $this->file = $file;
         $this->parameterBag = $parameterBag;
         $this->security = $security;
+        $this->logger = $logger;
+
+        /**
+         * @var CompetitionRepository $competitionRepository
+         */
+        $competitionRepository = $this->managerRegistry->getRepository(Competition::class);
+        $this->competitionRepository = $competitionRepository;
     }
 
     /**
@@ -112,7 +125,6 @@ class CompetitionGenerator
     {
         $beat = new Beat();
         $beat->setUser($this->security->getUser());
-        $this->competitionRepository = $this->managerRegistry->getRepository(Competition::class);
 
         /**
          * @var UploadedFile $file
@@ -121,6 +133,7 @@ class CompetitionGenerator
         $validationResult = FileValidator::validateMp3($file);
 
         if (is_string($validationResult)) {
+            $this->logger->error($validationResult, ['class' => static::class]);
             return $validationResult;
         }
 
@@ -140,7 +153,9 @@ class CompetitionGenerator
         $postLink = $request->request->get('postLink');
 
         try {
-            /*** @var Competition $competition */
+            /**
+             * @var Competition $competition
+             */
             $competition = $this->competitionRepository->findCompetitionByPostLink($postLink);
 
             $sample = $competition->getSample();
@@ -151,6 +166,7 @@ class CompetitionGenerator
             $beat->setCategory($category);
             $beat->setGenre($genre);
         } catch (NonUniqueResultException $e) {
+            $this->logger->error($e->getMessage(), [$e->getTraceAsString()]);
             return false;
         }
 
@@ -160,6 +176,7 @@ class CompetitionGenerator
             $this->em->persist($beat);
             $this->em->flush();
         } catch (Throwable $exception) {
+            $this->logger->error('Ошибка записи Beat в базу', ['class' => static::class]);
             return false;
         }
 
@@ -168,8 +185,18 @@ class CompetitionGenerator
 
     public function createCompetition()
     {
-        $this->categoryRepository = $this->managerRegistry->getRepository(Category::class);
-        $this->genreRepository = $this->managerRegistry->getRepository(Genre::class);
+        /**
+         * @var CategoryRepository $categoryRepository
+         */
+        $categoryRepository = $this->managerRegistry->getRepository(Category::class);
+
+        /**
+         * @var GenreRepository $genreRepository
+         */
+        $genreRepository = $this->managerRegistry->getRepository(Genre::class);
+
+        $this->categoryRepository = $categoryRepository;
+        $this->genreRepository = $genreRepository;
 
         $sample = $this->getRandomSample();
 
@@ -212,6 +239,7 @@ class CompetitionGenerator
         $this->crawler = $this->crawler->setCrawler($htmlContent);
 
         $countSample = $this->getCountOfSamples();
+        $beatLink = '';
 
         if ($countSample) {
             while (!$this->isRandomFound) {
@@ -341,7 +369,7 @@ class CompetitionGenerator
         $beatLink = null;
 
         /**
-         * @var $sample \DOMElement
+         * @var \DOMElement $sample
          */
         foreach ($samplesOnPage as $key => $sample) {
             if ($key === $sampleNumber) {
@@ -353,7 +381,7 @@ class CompetitionGenerator
     }
 
     /**
-     * @param null $uri
+     * @param string|null $uri
      * @param array $queryParams
      * @return string
      */
@@ -365,12 +393,12 @@ class CompetitionGenerator
     }
 
     /**
-     * @param $download
-     * @param $pathToSave
+     * @param string|null $download
+     * @param string $pathToSave
      * @param string $filename
      * @return string
      */
-    private function saveSample($download, $pathToSave, string $filename = ''): string
+    private function saveSample(?string $download, string $pathToSave, string $filename = ''): string
     {
         return $this->file->saveFile($download, $pathToSave, $filename);
     }

@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Beat;
-use App\Entity\Category;
 use App\Entity\Genre;
 use App\Repository\BeatRepository;
-use App\Repository\CategoryRepository;
 use App\Repository\GenreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +20,7 @@ class GenreController extends AbstractController
     public function index(): Response
     {
         /**
-         * @var $genresRepository GenreRepository
+         * @var GenreRepository $genresRepository
          */
         $genresRepository = $this->getDoctrine()->getRepository(Genre::class);
         $genresList = $genresRepository->getGenresWithCountOfBeats();
@@ -40,17 +38,17 @@ class GenreController extends AbstractController
     public function show(Request $request): Response
     {
         /**
-         * @var $genresRepository GenreRepository
+         * @var GenreRepository $genresRepository
          */
         $genresRepository = $this->getDoctrine()->getRepository(Genre::class);
 
         /**
-         * @var $beatsRepository BeatRepository
+         * @var BeatRepository $beatsRepository
          */
         $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
 
         /**
-         * @var $genre Genre
+         * @var Genre|null $genre
          */
         $genre = $genresRepository->find($request->get('id'));
 

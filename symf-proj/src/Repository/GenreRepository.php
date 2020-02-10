@@ -6,6 +6,7 @@ use App\Entity\Beat;
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -37,18 +38,17 @@ class GenreRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return Genre|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function findGenreByName($name): ?Genre
+    public function findGenreByName(string $name): ?Genre
     {
         return $this->createQueryBuilder('g')
             ->where('g.name = :name')
             ->setParameter('name', $name)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     // /**
