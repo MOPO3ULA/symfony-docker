@@ -48,7 +48,7 @@ class GenreController extends AbstractController
         $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
 
         /**
-         * @var Genre $genre
+         * @var Genre|null $genre
          */
         $genre = $genresRepository->find($request->get('id'));
 

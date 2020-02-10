@@ -48,7 +48,7 @@ class CategoryController extends AbstractController
         $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
 
         /**
-         * @var Category $category
+         * @var Category|null $category
          */
         $category = $categoriesRepository->find($request->get('id'));
 

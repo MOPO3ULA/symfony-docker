@@ -26,7 +26,8 @@ class Util
 
         $text .= "\n";
         if ($backtrace) {
-            $backtrace = reset(debug_backtrace());
+            $arrBacktrace = array_values(debug_backtrace());
+            $backtrace = array_shift($arrBacktrace);
             $text = 'Called in file: ' . $backtrace['file'] . ' in line: ' . $backtrace['line'] . " \n" . $text;
         }
         if ($fh = fopen($file, 'ab')) {
