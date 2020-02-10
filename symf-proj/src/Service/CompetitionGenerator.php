@@ -109,7 +109,12 @@ class CompetitionGenerator
         $this->parameterBag = $parameterBag;
         $this->security = $security;
         $this->logger = $logger;
-        $this->competitionRepository = $this->managerRegistry->getRepository(Competition::class);
+
+        /**
+         * @var CompetitionRepository $competitionRepository
+         */
+        $competitionRepository = $this->managerRegistry->getRepository(Competition::class);
+        $this->competitionRepository = $competitionRepository;
     }
 
     /**
@@ -180,8 +185,18 @@ class CompetitionGenerator
 
     public function createCompetition()
     {
-        $this->categoryRepository = $this->managerRegistry->getRepository(Category::class);
-        $this->genreRepository = $this->managerRegistry->getRepository(Genre::class);
+        /**
+         * @var CategoryRepository $categoryRepository
+         */
+        $categoryRepository = $this->managerRegistry->getRepository(Category::class);
+
+        /**
+         * @var GenreRepository $genreRepository
+         */
+        $genreRepository = $this->managerRegistry->getRepository(Genre::class);
+
+        $this->categoryRepository = $categoryRepository;
+        $this->genreRepository = $genreRepository;
 
         $sample = $this->getRandomSample();
 
@@ -366,7 +381,7 @@ class CompetitionGenerator
     }
 
     /**
-     * @param null $uri
+     * @param string|null $uri
      * @param array $queryParams
      * @return string
      */
