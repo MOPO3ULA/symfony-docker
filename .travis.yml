@@ -1,5 +1,4 @@
 language: php
 php:
   - 7.4
-script:
-  - ./symf-proj/vendor/bin/phpstan analyse -c ./symf-proj/phpstan.neon ./symf-proj/src ./symf-proj/tests --level 5
+script: build.sh
