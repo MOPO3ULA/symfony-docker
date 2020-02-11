@@ -1,6 +1,6 @@
 language: php
 php:
   - 7.4
-install: composer install
 script:
+  - cd symf-proj
   - vendor/bin/phpstan analyse src tests --level 5
