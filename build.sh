@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ./symf-proj
-vendor/bin/phpstan analyse src tests --level 5
+cd ./symf-proj || exit
+./vendor/bin/phpstan analyse src tests --level 5
