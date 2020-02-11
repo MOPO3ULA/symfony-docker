@@ -1,6 +1,5 @@
 #!/bin/bash
 
-pwd
 cd ./symf-proj
-pwd
+composer install
 vendor/bin/phpstan analyse src tests --level 5
