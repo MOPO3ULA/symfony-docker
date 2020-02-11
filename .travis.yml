@@ -2,4 +2,4 @@ language: php
 php:
   - 7.4
 script:
-  - symf-proj/vendor/bin/phpstan analyse src tests --level 5
+  - ./symf-proj/vendor/bin/phpstan analyse -c ./symf-proj/phpstan.neon ./symf-proj/src ./symf-proj/tests --level 5
