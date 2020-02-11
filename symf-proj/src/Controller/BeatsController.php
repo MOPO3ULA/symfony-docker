@@ -17,9 +17,7 @@ class BeatsController extends AbstractController
      */
     public function index(): Response
     {
-        /**
-         * @var BeatRepository $beatsRepository
-         */
+        /*** @var BeatRepository $beatsRepository */
         $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
         $beatsList = $beatsRepository->findAll();
 
