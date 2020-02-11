@@ -1,0 +1,15 @@
+register:
+  form_validation:
+    email:
+      empty: "Введите корректный email"
+    agreements: "Примите пользовательское соглашение"
+    password:
+      empty: "Введите пароль"
+      password_length: "Минимальная длина пароля %length% символов"
+      contain_digits: "Пароль должен содержать цифры"
+
+  success: "Спасибо за регистрацию!"
+
+exceptions:
+  blank_method: "This method can be blank - it will be intercepted by the logout key on your firewall"
+  users_not_found: "Пользователь не найден"

@@ -1,4 +1,4 @@
-FROM php:7.4.1-fpm
+FROM php:7.4.2-fpm
 
 RUN apt-get update && apt-get install -y \
         curl \
@@ -12,15 +12,12 @@ RUN apt-get update && apt-get install -y \
         libzip-dev \
         libonig-dev \
         gnupg \
-    && pecl install xdebug mcrypt-1.0.3 \
+    && pecl install mcrypt-1.0.3 \
     && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip opcache \
-    && docker-php-ext-enable mcrypt xdebug opcache \
+    && docker-php-ext-enable mcrypt opcache \
     && docker-php-ext-configure gd
 
-RUN echo 'xdebug.remote_port=9001' >> /usr/local/etc/php/php.ini \
-    && echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/php.ini \
-    && echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/php.ini \
-    && echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/php.ini \
+RUN echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/php.ini \
     && echo 'opcache.interned_strings_buffer=8' >> /usr/local/etc/php/php.ini \
     && echo 'opcache.max_accelerated_files=4000' >> /usr/local/etc/php/php.ini \
     && echo 'opcache.revalidate_freq=60' >> /usr/local/etc/php/php.ini \
@@ -43,7 +40,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 COPY symfony.ini /etc/php7/conf.d/
 COPY symfony.ini /etc/php7/cli/conf.d/
 COPY opcache.ini /usr/local/etc/php7/conf.d/
-COPY xdebug.ini  /usr/local/etc/php7/conf.d/
+#COPY xdebug.ini  /usr/local/etc/php7/conf.d/
 
 COPY symfony.pool.conf /etc/php7/php-fpm.d/
 

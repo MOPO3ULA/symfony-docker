@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use DateInterval;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,7 +50,7 @@ class Competition
     private $loopermanLink;
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLoopermanLink(): string
     {
@@ -66,7 +69,7 @@ class Competition
     }
 
     /**
-     * @return mixed
+     * @return Sample
      */
     public function getSample(): Sample
     {
@@ -74,7 +77,7 @@ class Competition
     }
 
     /**
-     * @param mixed $sample
+     * @param Sample $sample
      * @return Competition
      */
     public function setSample(Sample $sample): self
@@ -87,10 +90,10 @@ class Competition
 
     public function __construct()
     {
-        $this->startDate = new \DateTime();
+        $this->startDate = new DateTime();
 
         $startDate = clone $this->startDate;
-        $this->endDate = $startDate->add(new \DateInterval('P2D'));
+        $this->endDate = $startDate->add(new DateInterval('P2D'));
     }
 
     public function getId(): ?int
@@ -122,24 +125,24 @@ class Competition
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartDate(): ?DateTimeInterface
     {
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartDate(DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndDate(): ?DateTimeInterface
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeInterface $endDate): self
+    public function setEndDate(DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
 

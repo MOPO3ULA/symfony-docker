@@ -87,8 +87,17 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.2.1"
+    },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.1"
+    },
+    "monolog/monolog": {
+        "version": "1.25.3"
     },
     "nikic/php-parser": {
         "version": "v4.3.0"
@@ -108,10 +117,19 @@
     "php": {
         "version": "7.4"
     },
+    "phpstan/phpstan": {
+        "version": "0.12.9"
+    },
+    "phpstan/phpstan-doctrine": {
+        "version": "0.12.9"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
     "psr/container": {
+        "version": "1.0.0"
+    },
+    "psr/event-dispatcher": {
         "version": "1.0.0"
     },
     "psr/http-message": {
@@ -154,8 +172,17 @@
     "symfony/css-selector": {
         "version": "v4.3.8"
     },
-    "symfony/debug": {
-        "version": "v4.3.6"
+    "symfony/debug-bundle": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.1",
+            "ref": "f8863cbad2f2e58c4b65fa1eac892ab189971bea"
+        },
+        "files": [
+            "config/packages/dev/debug.yaml"
+        ]
     },
     "symfony/dependency-injection": {
         "version": "v4.3.6"
@@ -241,6 +268,23 @@
     },
     "symfony/mime": {
         "version": "v4.3.6"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.4.4"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "877bdb4223245783d00ed1f7429aa7ebc606d914"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/options-resolver": {
         "version": "v4.4.3"
@@ -328,6 +372,19 @@
     },
     "symfony/stopwatch": {
         "version": "v4.3.6"
+    },
+    "symfony/translation": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "2ad9d2545bce8ca1a863e50e92141f0b9d87ffcd"
+        },
+        "files": [
+            "config/packages/translation.yaml",
+            "translations/.gitignore"
+        ]
     },
     "symfony/translation-contracts": {
         "version": "v1.1.7"

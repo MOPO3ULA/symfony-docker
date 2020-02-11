@@ -52,14 +52,17 @@ class BeatRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param User $user
+     * @return mixed
+     */
     public function findBeatsByUser(User $user)
     {
         return $this->createQueryBuilder('beat')
             ->where('beat.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     // /**

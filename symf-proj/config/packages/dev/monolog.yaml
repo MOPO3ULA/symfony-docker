@@ -1,0 +1,22 @@
+#1)Sets the path and file name.
+#Output was like <name>-<date>.log
+#2)Sets the channel. Create or use exist
+#Finds created channels in /config/packages/monolog.yaml
+#3)Add constructor, pass LoggerInterface and add argument in services.yaml
+monolog:
+    handlers:
+        main:
+            type: rotating_file
+            path: "/var/www/symfony/log/default.log"
+            level: info
+            channels: ["default"]
+        registration:
+            type: rotating_file
+            path: "/var/www/symfony/log/registration.log"
+            level: info
+            channels: ["registration"]
+        submit_beat:
+            type: rotating_file
+            path: "/var/www/symfony/log/submit-beat.log"
+            level: error
+            channels: ["submit_beat"]

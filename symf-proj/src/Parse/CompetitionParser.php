@@ -4,6 +4,7 @@ namespace App\Parse;
 
 
 use App\Validate\CompetitionValidator;
+use DOMElement;
 use Symfony\Component\DomCrawler\Crawler;
 
 class CompetitionParser
@@ -56,7 +57,7 @@ class CompetitionParser
         return $this->crawler->filter('.player-title');
     }
 
-    public function getHrefString(\DOMElement $element): string
+    public function getHrefString(DOMElement $element): string
     {
         return $element->getAttribute('href');
     }
@@ -77,7 +78,7 @@ class CompetitionParser
         $tagsString = $this->getTags();
 
         /**
-         * @var $tag \DOMElement
+         * @var DOMElement $tag
          */
         foreach ($tagsString as $key => $tag) {
             $tagText = $tag->textContent;
