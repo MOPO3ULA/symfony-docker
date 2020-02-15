@@ -7,7 +7,6 @@ namespace App\Service\MailServices;
 use App\Repository\UserRepository;
 use App\Service\MailServices\Base\MailerService;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,10 +27,6 @@ class RegistrationMailService extends MailerService
      * @var Environment
      */
     private Environment $twig;
-    /**
-     * @var MailerInterface
-     */
-    private MailerInterface $mailer;
 
     /**
      * RegistrationMailService constructor.
@@ -48,18 +43,18 @@ class RegistrationMailService extends MailerService
         Environment $twig,
         MailerInterface $mailer)
     {
-        parent::__construct($logger, $translator);
+        parent::__construct($logger, $translator, $mailer);
 
         $this->logger = $logger;
         $this->translator = $translator;
         $this->repository = $repository;
         $this->twig = $twig;
-        $this->mailer = $mailer;
     }
 
     /**
      * Send registration email
      * @param string $email
+     * @return Email
      */
     protected function internalSend(string $email)
     {
@@ -85,19 +80,13 @@ class RegistrationMailService extends MailerService
             $this->logger->error($e->getMessage());
         }
 
-        $email = (new Email())
+        $emailObject = (new Email())
             ->from('hello@example.com')
             ->to($this->user->getEmail())
             ->subject($this->translator->trans('register.mail.subject'))
             ->text($this->translator->trans('register.mail.text'))
             ->html($html);
 
-        try {
-            $this->mailer->send($email);
-        } catch (TransportExceptionInterface $exception) {
-            $this->logger->error($exception->getMessage(), ['Trace' => $exception->getTraceAsString()]);
-        }
-
-
+        return $emailObject;
     }
 }
