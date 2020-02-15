@@ -67,7 +67,15 @@ class RegistrationMailService extends MailerService
 
         try {
             $html = $this->twig->render(
-                '@TwigTemplate/emails/registration/registration.html.twig'
+                '@TwigTemplate/emails/registration/registration.html.twig',
+                [
+                    'main' => $this->translator->trans('register.mail.main', ['%username%' => $this->user->getUsername()]),
+                    'description' => $this->translator->trans('register.mail.description'),
+                    'link_description' => $this->translator->trans('register.mail.link_description'),
+                    'link' => $this->translator->trans('register.mail.link'),
+                    'footer' => $this->translator->trans('register.mail.footer'),
+                    'footer_end' => $this->translator->trans('register.mail.footer_end'),
+                ]
             );
         } catch (LoaderError $e) {
             $this->logger->error($e->getMessage());
