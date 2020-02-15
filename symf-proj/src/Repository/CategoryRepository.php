@@ -6,6 +6,7 @@ use App\Entity\Beat;
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -41,17 +42,16 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return Category|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function findCategoryByName($name): ?Category
+    public function findCategoryByName(string $name): ?Category
     {
         return $this->createQueryBuilder('c')
             ->where('c.name = :name')
             ->setParameter('name', $name)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 }

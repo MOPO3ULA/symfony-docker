@@ -8,6 +8,7 @@ use App\Repository\BeatRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,9 +23,15 @@ class UsersController extends AbstractController
      */
     private TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    /**
+     * @var ManagerRegistry $managerRegistry
+     */
+    private ManagerRegistry $managerRegistry;
+
+    public function __construct(TranslatorInterface $translator, ManagerRegistry $managerRegistry)
     {
         $this->translator = $translator;
+        $this->managerRegistry = $managerRegistry;
     }
 
     /**
@@ -36,8 +43,11 @@ class UsersController extends AbstractController
     {
         $username = $request->get('username');
 
-        /*** @var $userRepository UserRepository */
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        /**
+         * @var UserRepository $userRepository
+         */
+        $userRepository = $this->managerRegistry->getRepository(User::class);
+        $user = null;
 
         try {
             $user = $userRepository->findUserByUsername($username);
@@ -48,8 +58,10 @@ class UsersController extends AbstractController
             $user = reset($user);
         }
 
-        /*** @var $beatRepository BeatRepository */
-        $beatRepository = $this->getDoctrine()->getRepository(Beat::class);
+        /**
+         * @var BeatRepository $beatRepository
+         */
+        $beatRepository = $this->managerRegistry->getRepository(Beat::class);
 
         $userBeats = $beatRepository->findBeatsByUser($user);
 

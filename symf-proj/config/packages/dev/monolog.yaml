@@ -21,3 +21,8 @@ monolog:
             level: info
             channels: ["mailer"]
 
+        submit_beat:
+            type: rotating_file
+            path: "/var/www/symfony/log/submit-beat.log"
+            level: error
+            channels: ["submit_beat"]

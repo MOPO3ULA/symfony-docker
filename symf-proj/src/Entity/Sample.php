@@ -77,7 +77,7 @@ class Sample
     private $size;
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSize(): string
     {

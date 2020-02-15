@@ -4,6 +4,7 @@ namespace App\Validate;
 
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use \Throwable;
 
 class FileValidator
 {
@@ -41,7 +42,7 @@ class FileValidator
     {
         try {
             $fileSize = $file->getSize();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return 'File size must not exceed 2 MB';
         }
 
@@ -57,19 +58,19 @@ class FileValidator
     }
 
     /**
-     * @param $size
+     * @param int $size
      * @return bool
      */
-    private static function validateFileSize($size): bool
+    private static function validateFileSize(int $size): bool
     {
         return !(self::bytesToKBytes($size) > self::maxKBytesFileSize);
     }
 
     /**
-     * @param $bytes
+     * @param int $bytes
      * @return float
      */
-    private static function bytesToKBytes($bytes): float
+    private static function bytesToKBytes(int $bytes): float
     {
         return ceil($bytes / 1024);
     }
