@@ -1,0 +1,33 @@
+<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+        {% for key,value in base_routes %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path(value.path) }}">{{ value.label }}</a>
+            </li>
+        {% endfor %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% for key, value in auth %}
+                {% if key == 'detail' %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ path(value.path, {'username': app.user.username}) }}">{{ value.label }}</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path(value.path) }}">{{ value.label }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for key, value in not_auth %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path(value.path) }}">{{ value.label }}</a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</div>
