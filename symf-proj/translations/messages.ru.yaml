@@ -7,8 +7,11 @@ register:
       empty: "Введите пароль"
       password_length: "Минимальная длина пароля %length% символов"
       contain_digits: "Пароль должен содержать цифры"
-
   success: "Спасибо за регистрацию!"
+  mail:
+    subject: Новая регистрация
+    text: Спасибо за регистрацию
+
 
 exceptions:
   blank_method: "This method can be blank - it will be intercepted by the logout key on your firewall"

@@ -45,5 +45,10 @@ abstract class MailerService implements IMailer
         }
     }
 
+    /**
+     *
+     * @param string $email
+     * @return mixed
+     */
     protected abstract function internalSend(string $email);
 }
