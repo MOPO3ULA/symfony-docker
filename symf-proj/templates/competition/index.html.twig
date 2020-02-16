@@ -105,7 +105,7 @@
                                             Your beat (*.mp3)
                                         </label>
                                         <input type="file" accept="audio/mpeg" name="file" class="custom-file-input"
-                                               id="customFile" required>
+                                               id="customFile-{{ loop.index }}" required>
                                     </div>
                                 </div>
 
@@ -115,7 +115,7 @@
                                             Beat cover
                                         </label>
                                         <input type="file" accept="image/*" name="picture" class="custom-file-input"
-                                               id="pictureFile" required>
+                                               id="pictureFile-{{ loop.index }}" required>
                                     </div>
                                 </div>
 
