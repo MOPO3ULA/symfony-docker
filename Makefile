@@ -6,7 +6,7 @@ ifeq ($(OS),Darwin)
 	docker-compose -f docker-compose-dev.yml up -d --build
 	docker-sync clean
 	docker-sync start
-	docker exec -it symfony-docker_php_1 php doctrine:schema:update --force
+	docker exec -it symfony-docker_php_1 php bin/console doctrine:schema:update --force
 else
 	docker-compose up -d
 	docker exec -it symfony-docker_php_1 php bin/console doctrine:schema:update --force
