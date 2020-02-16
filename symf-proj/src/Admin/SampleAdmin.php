@@ -43,7 +43,7 @@ final class SampleAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id', TextType::class, ['label' => 'id'])
-            ->addIdentifier('title', TextType::class, ['label' => 'title'])
+            ->add('title', TextType::class, ['label' => 'title'])
             ->add('genre', null, ['label' => 'genre'])
             ->add('userName', null, ['label' => 'userName'])
             ->add('userLink', null, ['label' => 'userLink'])

@@ -63,12 +63,12 @@ services:
         class: App\Admin\UserAdmin
         arguments: [~, App\Entity\User, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Main', label: sonata.users.table }
+            - { name: sonata.admin, manager_type: orm, group: sonata.main, label: sonata.users.table }
     admin.samples:
         class: App\Admin\SampleAdmin
         arguments: [~, App\Entity\Sample, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Main', label: sonata.samples.table }
+            - { name: sonata.admin, manager_type: orm, group: sonata.main, label: sonata.samples.table }
 
 #end Admin content
 
