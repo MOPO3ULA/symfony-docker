@@ -1,0 +1,139 @@
+{% extends '@TwigTemplate/base.html.twig' %}
+
+{% block body %}
+
+    <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
+    <div class="position-relative overflow-hidden p-3 text-center bg-light">
+        <div class="col-md-10 mx-auto">
+            <h1 class="display-4 font-weight-normal">{{ competition.sample.title }}</h1>
+            {% if competition.sample.description %}
+                <p class="lead font-weight-normal">
+                    {{ competition.sample.description }}
+                </p>
+            {% endif %}
+            <div class="card sample" id="competition">
+                <h5 class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <p class="float-left">
+                                {{ competition.title }}
+                            </p>
+                        </div>
+
+                        <div class="col-lg-1 text-center">
+                            <a href="javascript:">
+                                <span class="fa fa-play js-btn-play" id="wave-player"></span>
+                            </a>
+                        </div>
+                    </div>
+                </h5>
+                <div class="card-body">
+                    <div id="waveform"></div>
+                </div>
+                <audio controls hidden class="audio">
+                    <source src="{{ competition.sample.file }}">
+                </audio>
+            </div>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <a class="mx-auto btn btn-block btn-outline-success col-md-4" data-toggle="modal"
+                   data-target="#modal-submit">Join competition</a>
+            {% else %}
+                <a type="button" href="{{ path('app_register') }}" class="btn btn-outline-success">
+                    Sign up to join
+                </a>
+            {% endif %}
+            <a href="{{ competition.loopermanLink }}" target="_blank" class="btn btn-link"
+               id="original-post">
+                Original post
+            </a>
+        </div>
+        <i class="em em-musical_note emoji-detail" aria-label="MUSICAL NOTE"></i>
+    </div>
+
+    {% if beats %}
+        <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+        {% for beat in beats %}
+            <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+                {% if beat.picture %}
+
+                {% endif %}
+                <div class="my-3 p-3">
+                    <a href="{{ path('beatsDetail', {id: beat.id}) }}">
+                        <h2 class="display-5">{{ beat.title }}</h2>
+                    </a>
+                    {% if beat.description %}
+                        <p class="lead">
+                            {{ beat.description }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Modal -->
+    <div id="modal-submit" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header align-items-center">
+                    <h4 class="modal-title">Join competition</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form id="sample-modal-form" action="javascript:" class="competition-form"
+                      method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="textTitle">Title</label>
+                            <input class="form-control" name="title" id="textTitle"
+                                   type="text" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="textDescription">Description</label>
+                            <textarea class="form-control" name="description"
+                                      id="textDescription" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-file form-control">
+                                <label class="custom-file-label" for="customFile">
+                                    Your beat (*.mp3)
+                                </label>
+                                <input type="file" accept="audio/mpeg" name="file" class="custom-file-input"
+                                       id="customFile" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-file form-control">
+                                <label class="custom-file-label" for="pictureFile">
+                                    Beat cover
+                                </label>
+                                <input type="file" accept="image/*" name="picture" class="custom-file-input"
+                                       id="pictureFile" required>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger is-hidden" id="error" role="alert"></div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="submit" class="btn btn-outline-success col-lg-3">Submit</button>
+                        <button type="button" class="btn btn-outline-danger d-none d-lg-block col-lg-2"
+                                data-dismiss="modal">Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
+
+{% block title %}Competition list{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app_competition_detail') }}
+{% endblock %}

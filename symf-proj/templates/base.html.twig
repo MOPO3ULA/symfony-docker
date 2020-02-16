@@ -76,7 +76,7 @@
                 }
             } %}
         </nav>
-        <main role="main" class="container">
+        <main role="main" class="container-fluid">
             {% for flash in app.session.flashBag.get('success') %}
                 <div class="alert alert-success">
                     {{ flash }}

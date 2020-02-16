@@ -130,6 +130,12 @@ class CompetitionGenerator
          * @var UploadedFile $file
          */
         $file = $request->files->get('file');
+
+        /**
+         * @var UploadedFile $picture
+         */
+        $picture = $request->files->get('picture');
+
         $validationResult = FileValidator::validateMp3($file);
 
         if (is_string($validationResult)) {
@@ -138,8 +144,13 @@ class CompetitionGenerator
         }
 
         $saveDestination = $this->parameterBag->get('kernel.project_dir') . '/public/upload/beats/';
+        $saveDestinationPicture = $this->parameterBag->get('kernel.project_dir') . '/public/upload/images/beats';
+
         $originalFilename = $file->getClientOriginalName();
+        $originalPictureName = $picture->getClientOriginalName();
+
         $file->move($saveDestination, $originalFilename);
+        $picture->move($saveDestinationPicture, $originalPictureName);
 
         $fullPath = $saveDestination . $originalFilename;
         $mp3 = new Mp3Info($fullPath);
@@ -149,6 +160,7 @@ class CompetitionGenerator
         $beat->setDescription($request->request->get('description'));
         $beat->setBeatLength($mp3Length);
         $beat->setFileUrl('/upload/samples/' . $originalFilename);
+        $beat->setPicture('/upload/images/beats/' . $originalPictureName);
 
         $postLink = $request->request->get('postLink');
 
