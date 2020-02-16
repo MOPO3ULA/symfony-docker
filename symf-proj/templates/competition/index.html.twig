@@ -4,11 +4,13 @@
 
     {% if competitions %}
         {% for competition in competitions %}
-            <div class="card m-5" id="competition-{{ loop.index }}">
+            <div class="card sample" id="competition-{{ loop.index }}">
                 <h5 class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            {{ competition.title }}
+                            <a class="float-left" href="{{ path('competition_detail', {id: competition.id}) }}">
+                                {{ competition.title }}
+                            </a>
                         </div>
 
                         <div class="col-lg-1 text-center">
@@ -58,10 +60,10 @@
                                 Sign up to join
                             </a>
                         {% endif %}
-                        <a type="button" href="#" class="btn btn-outline-info">More</a>
+                        <a type="button" href="{{ path('competition_detail', {id: competition.id}) }}" class="btn btn-outline-info">More</a>
 
                         <a href="{{ competition.loopermanLink }}" target="_blank" class="btn btn-link"
-                        id="original-post-{{ loop.index }}">
+                           id="original-post-{{ loop.index }}">
                             Original post
                         </a>
                     </li>
@@ -99,13 +101,26 @@
 
                                 <div class="form-group">
                                     <div class="custom-file form-control">
-                                        <label class="custom-file-label" for="customFile-{{ loop.index }}">Choose
-                                            file</label>
+                                        <label class="custom-file-label" for="customFile">
+                                            Your beat (*.mp3)
+                                        </label>
                                         <input type="file" accept="audio/mpeg" name="file" class="custom-file-input"
-                                               id="customFile-{{ loop.index }}" required>
+                                               id="customFile" required>
                                     </div>
                                 </div>
-                                <div class="alert alert-danger is-hidden" id="error-{{ loop.index }}" role="alert"></div>
+
+                                <div class="form-group">
+                                    <div class="custom-file form-control">
+                                        <label class="custom-file-label" for="pictureFile">
+                                            Beat cover
+                                        </label>
+                                        <input type="file" accept="image/*" name="picture" class="custom-file-input"
+                                               id="pictureFile" required>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-danger is-hidden" id="error-{{ loop.index }}" role="alert">
+                                </div>
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="submit" class="btn btn-outline-success col-lg-3">Submit</button>
