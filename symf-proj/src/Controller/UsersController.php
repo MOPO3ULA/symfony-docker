@@ -2,16 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Beat;
-use App\Entity\User;
-use App\Repository\BeatRepository;
-use App\Repository\UserRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
+
+use App\Service\LkService;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -22,13 +18,33 @@ class UsersController extends AbstractController
      */
     private TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    /**
+     * @var ManagerRegistry $managerRegistry
+     */
+    private ManagerRegistry $managerRegistry;
+    /**
+     * @var LkService
+     */
+    private LkService $lkService;
+
+    /**
+     * UsersController constructor.
+     * @param TranslatorInterface $translator
+     * @param ManagerRegistry $managerRegistry
+     * @param LkService $lkService
+     */
+    public function __construct(
+        TranslatorInterface $translator,
+        ManagerRegistry $managerRegistry,
+        LkService $lkService)
     {
         $this->translator = $translator;
+        $this->managerRegistry = $managerRegistry;
+        $this->lkService = $lkService;
     }
 
     /**
-     * @Route("/users/{username}", name="detailUser")
+     * @Route("/profile/{username}", name="detailUser")
      * @param Request $request
      * @return Response
      */
@@ -36,22 +52,7 @@ class UsersController extends AbstractController
     {
         $username = $request->get('username');
 
-        /*** @var $userRepository UserRepository */
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-
-        try {
-            $user = $userRepository->findUserByUsername($username);
-        } catch (NoResultException $e) {
-            throw new NotFoundHttpException($this->translator->trans("exceptions.users_not_found"));
-        } catch (NonUniqueResultException $e) {
-            //Если вдруг найдется несколько одинаковых никнеймов, то берем первый найденный
-            $user = reset($user);
-        }
-
-        /*** @var $beatRepository BeatRepository */
-        $beatRepository = $this->getDoctrine()->getRepository(Beat::class);
-
-        $userBeats = $beatRepository->findBeatsByUser($user);
+        [$user, $userBeats] = $this->lkService->profileInfo($username);
 
         return $this->render('@TwigTemplate/users/detail.html.twig', [
             'beats' => $userBeats,

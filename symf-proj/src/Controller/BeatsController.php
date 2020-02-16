@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Beat;
 use App\Repository\BeatRepository;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,9 +17,7 @@ class BeatsController extends AbstractController
      */
     public function index(): Response
     {
-        /**
-         * @var $beatsRepository BeatRepository
-         */
+        /*** @var BeatRepository $beatsRepository */
         $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
         $beatsList = $beatsRepository->findAll();
 
