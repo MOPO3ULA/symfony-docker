@@ -59,6 +59,7 @@ class RegistrationMailService extends MailerService
     protected function internalSend(string $email)
     {
         $this->user = $this->repository->findOneBy(['email' => $email]);
+        $renderedHtml = null;
 
         try {
             $renderedHtml = $this->twig->render(
