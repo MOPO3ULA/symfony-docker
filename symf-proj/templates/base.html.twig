@@ -24,27 +24,27 @@
                 {
                     beats:
                     {
-                        path: 'beatsList',
+                        path: path('beatsList'),
                         label: 'Beats list'
                     },
                     categories:
                     {
-                        path: 'categoriesList',
+                        path: path('categoriesList'),
                         label: 'Categories'
                     },
                     genres:
                     {
-                        path: 'genresList',
+                        path: path('genresList'),
                         label: 'Genres'
                     },
                     feedback:
                     {
-                        path: 'feedbackForm',
+                        path: path('feedbackForm'),
                         label: 'Feedback'
                     },
                     competition:
                     {
-                        path: 'competitionList',
+                        path: path('competitionList'),
                         label: 'Competition'
                     },
                 },
@@ -52,12 +52,12 @@
                 {
                     detail:
                     {
-                        path: 'detailUser',
+                        path: path('detailUser', {'username': app.user.username}),
                         label: 'My account'
                     },
                     logout:
                     {
-                        path: 'app_logout',
+                        path: path('app_logout'),
                         label: 'Logout'
                     },
                 },
@@ -65,12 +65,12 @@
                 {
                     register:
                     {
-                        path: 'app_register',
+                        path: path('app_register'),
                         label: 'Register'
                     },
                     register:
                     {
-                        path: 'app_register',
+                        path: path('app_register'),
                         label: 'Register'
                     }
                 }

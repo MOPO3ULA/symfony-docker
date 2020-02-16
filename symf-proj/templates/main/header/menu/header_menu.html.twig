@@ -2,26 +2,25 @@
     <ul class="navbar-nav mr-auto">
         {% for key,value in base_routes %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ path(value.path) }}">{{ value.label }}</a>
+                <a class="nav-link" href="{{ value.path }}">{{ value.label }}</a>
             </li>
         {% endfor %}
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             {% for key, value in auth %}
-                {% if key == 'detail' %}
-                    <li class="nav-item">
+                <li class="nav-item">
+                    {% if key == 'detail' %}
                         <a class="nav-link"
-                           href="{{ path(value.path, {'username': app.user.username}) }}">{{ value.label }}</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path(value.path) }}">{{ value.label }}</a>
-                    </li>
-                {% endif %}
+                           href="{{ value.path }}">{{ value.label }}</a>
+
+                    {% else %}
+                        <a class="nav-link" href="{{ value.path }}">{{ value.label }}</a>
+                    {% endif %}
+                </li>
             {% endfor %}
         {% else %}
             {% for key, value in not_auth %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path(value.path) }}">{{ value.label }}</a>
+                    <a class="nav-link" href="{{ value.path }}">{{ value.label }}</a>
                 </li>
             {% endfor %}
         {% endif %}
