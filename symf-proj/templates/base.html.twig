@@ -52,7 +52,7 @@
                 {
                     detail:
                     {
-                        path: path('detailUser', {'username': app.user.username}),
+                        path: path('detailUser', {'username': app.user.username|default('undefined')}),
                         label: 'My account'
                     },
                     logout:
