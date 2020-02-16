@@ -76,7 +76,7 @@
         "version": "v1.0.0"
     },
     "egulias/email-validator": {
-        "version": "2.1.15"
+        "version": "2.1.17"
     },
     "guzzlehttp/guzzle": {
         "version": "6.4.1"
@@ -182,9 +182,6 @@
     "psr/container": {
         "version": "1.0.0"
     },
-    "psr/event-dispatcher": {
-        "version": "1.0.0"
-    },
     "psr/http-message": {
         "version": "1.0.1"
     },
@@ -261,6 +258,9 @@
     "symfony/css-selector": {
         "version": "v4.3.8"
     },
+    "symfony/debug": {
+        "version": "v4.3.11"
+    },
     "symfony/debug-bundle": {
         "version": "4.1",
         "recipe": {
@@ -284,9 +284,6 @@
     },
     "symfony/dotenv": {
         "version": "v4.3.6"
-    },
-    "symfony/error-handler": {
-        "version": "v4.4.1"
     },
     "symfony/event-dispatcher": {
         "version": "v4.3.6"
@@ -335,12 +332,12 @@
         ]
     },
     "symfony/google-mailer": {
-        "version": "4.4",
+        "version": "4.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.4",
-            "ref": "f8fd4ddb9b477510f8f4bce2b9c054ab428c0120"
+            "version": "4.3",
+            "ref": "da7b29c169c9de4359a75be96d729438129d7d86"
         }
     },
     "symfony/http-foundation": {
