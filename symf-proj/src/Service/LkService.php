@@ -45,6 +45,7 @@ class LkService
      */
     public function profileInfo(string $userName) : array
     {
+        $user = null;
         try {
             $user = $this->userRepository->findUserByUsername($userName);
         } catch (NoResultException $e) {
