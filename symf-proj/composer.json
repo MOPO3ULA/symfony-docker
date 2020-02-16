@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "^2.0",
         "guzzlehttp/guzzle": "^6.4",
         "paquettg/php-html-parser": "^2.2",
+        "sonata-project/admin-bundle": "^3.59",
         "symfony/asset": "4.3.*",
         "symfony/console": "4.3.*",
         "symfony/css-selector": "4.3.*",
