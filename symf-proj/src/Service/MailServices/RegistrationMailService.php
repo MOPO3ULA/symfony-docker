@@ -61,7 +61,7 @@ class RegistrationMailService extends MailerService
         $this->user = $this->repository->findOneBy(['email' => $email]);
 
         try {
-            $html = $this->twig->render(
+            $renderedHtml = $this->twig->render(
                 '@TwigTemplate/emails/registration/registration.html.twig',
                 [
                     'main' => $this->translator->trans('register.mail.main', ['%username%' => $this->user->getUsername()]),
@@ -85,7 +85,7 @@ class RegistrationMailService extends MailerService
             ->to($this->user->getEmail())
             ->subject($this->translator->trans('register.mail.subject'))
             ->text($this->translator->trans('register.mail.text'))
-            ->html($html);
+            ->html($renderedHtml);
 
         return $emailObject;
     }
