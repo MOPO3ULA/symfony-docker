@@ -25,6 +25,16 @@ class User implements UserInterface
     private $email;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_active;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $date_registered;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -40,6 +50,12 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $username;
+    
+    public function __construct() 
+    {
+        $this->is_active = true;
+        $this->date_registered = new \DateTime('now');
+    }
 
     /**
      * @param string $username
@@ -133,5 +149,37 @@ class User implements UserInterface
     public function __toString()
     {
         return $this->username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param mixed $is_active
+     */
+    public function setIsActive($is_active): void
+    {
+        $this->is_active = $is_active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateRegistered()
+    {
+        return $this->date_registered;
+    }
+
+    /**
+     * @param mixed $date_registered
+     */
+    public function setDateRegistered($date_registered): void
+    {
+        $this->date_registered = $date_registered;
     }
 }

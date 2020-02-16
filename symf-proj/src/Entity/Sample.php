@@ -119,7 +119,7 @@ class Sample
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -237,5 +237,10 @@ class Sample
         $this->file = $file;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
     }
 }
