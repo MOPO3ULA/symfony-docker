@@ -30,6 +30,11 @@ class User implements UserInterface
     private $is_active;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $date_registered;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -49,6 +54,7 @@ class User implements UserInterface
     public function __construct() 
     {
         $this->is_active = true;
+        $this->date_registered = new \DateTime('now');
     }
 
     /**
@@ -159,5 +165,21 @@ class User implements UserInterface
     public function setIsActive($is_active): void
     {
         $this->is_active = $is_active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateRegistered()
+    {
+        return $this->date_registered;
+    }
+
+    /**
+     * @param mixed $date_registered
+     */
+    public function setDateRegistered($date_registered): void
+    {
+        $this->date_registered = $date_registered;
     }
 }

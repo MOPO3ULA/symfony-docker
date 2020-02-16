@@ -23,9 +23,13 @@ exceptions:
   users_not_found: "Пользователь не найден"
 
 #Sonata
-users:
-  table: Пользователи
-  labels:
-    nick: Nick
-    email: Email
-    password: Пароль
+sonata:
+  users:
+    table: Пользователи
+    labels:
+      nick: Nick
+      email: Email
+      date_registration: Дата регистрации
+      password: Пароль
+  samples:
+    table: Сэмплы
