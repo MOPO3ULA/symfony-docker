@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class UserAdmin extends AbstractAdmin
@@ -26,6 +25,7 @@ final class UserAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('is_active', null, ['label' => 'active'])
             ->add('username', TextType::class, ['label' => 'users.labels.nick'])
             ->add('email', EmailType::class, ['label' => 'users.labels.email'])
             ->add('password', TextType::class, ['label' => 'users.labels.password']);
@@ -39,8 +39,8 @@ final class UserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('username')
-            ->add('email')
+            ->addIdentifier('username', TextType::class, ['label' => 'users.labels.nick'])
+            ->add('email', EmailType::class, ['label' => 'users.labels.email'])
             ->add('_action', null,
                 [
                     'actions' => [
