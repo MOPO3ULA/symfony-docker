@@ -1,5 +1,5 @@
 <a href="https://travis-ci.com/MOPO3ULA/symfony-docker"><img src="https://travis-ci.com/MOPO3ULA/symfony-docker.svg?branch=master" alt="Build status"></a>
-<a href="https://github.com/MOPO3ULA/symfony-docker/actions"><img src="https://github.com/MOPO3ULA/symfony-docker/workflows/PHP%20Composer/badge.svg?branch=master" alt="Build status">
+<a href="https://github.com/MOPO3ULA/symfony-docker/actions"><img src="https://github.com/MOPO3ULA/symfony-docker/workflows/PHP%20Composer/badge.svg?branch=master" alt="Build status"></a>
 
 Проект на связке Docker и Symfony 4.4+
 =====================================
