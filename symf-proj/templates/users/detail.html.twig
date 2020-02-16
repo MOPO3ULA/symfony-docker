@@ -1,30 +1,103 @@
 {% extends '@TwigTemplate/base.html.twig' %}
 
 {% block body %}
+    <div class="container emp-profile">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-thumbnail" width="250" src="https://lh3.googleusercontent.com/proxy/agd-h63AmWgJwA7qxVsd59C8k3XFBNb3SRM4zoJyfxTjVMy5pEMfBtmbRztnpi00Sp36cuBh-qYVveYInaKmK9obZ185UWA3LKVcBHY">
+                </div>
+                <div class="col-md-6">
+                    <div class="profile-head">
+                        <h5>
+                            {{ user.username }}
+                        </h5>
+                        <h6>
+                            Web Developer
+                        </h6>
+                        <p class="proile-rating">RANKINGS : <span>12/10</span></p>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+{#                <div class="col-md-4">#}
+{# На будущее #}
+{#                </div>#}
+                <div class="offset-md-4 col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>User Id</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.id }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>Kshiti Ghelani</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Experience</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>Expert</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Hourly Rate</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>10$/hr</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
 
     {% if beats %}
         <h1>Beats by {{ user.username }}</h1>
 
         <ul>
-        {% for beat in beats %}
-            <li>
-                <p>
-                    <a href="{{ path('beatsDetail', {'id': beat.id}) }}">
-                        {{ beat.title }}
-                    </a>
-                </p>
-            </li>
-        {% endfor %}
+            {% for beat in beats %}
+                <li>
+                    <p>
+                        <a href="{{ path('beatsDetail', {'id': beat.id}) }}">
+                            {{ beat.title }}
+                        </a>
+                    </p>
+                </li>
+            {% endfor %}
         </ul>
-    {% else %}
-        <p>К сожалению, у
-            {% if app.user.id == user.id %}
-                тебя
-            {% else %}
-                {{ user.username }}
-            {% endif %}
-            ещё нет битов :(
-        </p>
     {% endif %}
 
 {% endblock body %}
