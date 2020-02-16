@@ -21,3 +21,11 @@ register:
 exceptions:
   blank_method: "This method can be blank - it will be intercepted by the logout key on your firewall"
   users_not_found: "Пользователь не найден"
+
+#Sonata
+users:
+  table: Пользователи
+  labels:
+    nick: Nick
+    email: Email
+    password: Пароль

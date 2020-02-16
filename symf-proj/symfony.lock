@@ -277,6 +277,9 @@
     "sonata-project/doctrine-extensions": {
         "version": "1.5.1"
     },
+    "sonata-project/doctrine-orm-admin-bundle": {
+        "version": "3.14.0"
+    },
     "sonata-project/exporter": {
         "version": "2.1.0"
     },
@@ -334,6 +337,9 @@
     },
     "symfony/dotenv": {
         "version": "v4.3.6"
+    },
+    "symfony/error-handler": {
+        "version": "v4.4.4"
     },
     "symfony/event-dispatcher": {
         "version": "v4.3.6"
