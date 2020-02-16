@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\BeatRepository;
 use App\Repository\CompetitionRepository;
 use App\Service\CompetitionGenerator;
 use Psr\Log\LoggerInterface;
@@ -24,16 +25,20 @@ class CompetitionController extends AbstractController
      */
     private CompetitionRepository $competitionRepository;
 
+    private BeatRepository $beatRepository;
+
     /**
      * CompetitionController constructor.
      * @param LoggerInterface $logger
      * @param CompetitionRepository $competitionRepository
      */
     public function __construct(LoggerInterface $logger,
-                                CompetitionRepository $competitionRepository)
+                                CompetitionRepository $competitionRepository,
+                                BeatRepository $beatRepository)
     {
         $this->logger = $logger;
         $this->competitionRepository = $competitionRepository;
+        $this->beatRepository = $beatRepository;
     }
 
     /**
@@ -46,6 +51,29 @@ class CompetitionController extends AbstractController
 
         return $this->render('@TwigTemplate/competition/index.html.twig', [
             'competitions' => $competitionsList
+        ]);
+    }
+
+    /**
+     * @Route("/competition/{id}", name="competition_detail", requirements={"id": "[0-9]+"})
+     * @param Request $request
+     * @return Response
+     */
+    public function detail(Request $request): Response
+    {
+        $competitionId = $request->get('id');
+        $competition = $this->competitionRepository->findOneBy(['id' => $competitionId]);
+        $beats = null;
+
+        if ($competition) {
+            $beats = $this->beatRepository->findBy(['competition' => $competition]);
+        } else {
+            $this->logger->error('Не найдено соревнование с id ' . $competitionId);
+        }
+
+        return $this->render('@TwigTemplate/competition/detail.html.twig', [
+            'competition' => $competition,
+            'beats' => $beats
         ]);
     }
 
