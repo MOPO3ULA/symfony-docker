@@ -42,6 +42,18 @@ services:
         arguments:
             $logger: '@monolog.logger.registration'
 
+    App\Service\MailServices\Base\MailerService:
+        autowire: true
+        public: false
+        arguments:
+            $logger: '@monolog.logger.mailer'
+
+    App\Service\MailServices\RegistrationMailService:
+        autowire: true
+        public: false
+        arguments:
+            $logger: '@monolog.logger.mailer'
+
     App\Service\CompetitionGenerator:
         autowire: true
         public: false
