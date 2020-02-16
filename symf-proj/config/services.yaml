@@ -64,7 +64,7 @@ services:
         class: App\Admin\UserAdmin
         arguments: [~, App\Entity\User, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Settings', label: 'Users' }
+            - { name: sonata.admin, manager_type: orm, group: 'Settings', label: users.table }
 
 
 

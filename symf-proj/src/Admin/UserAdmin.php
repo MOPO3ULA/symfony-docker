@@ -8,13 +8,27 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class UserAdmin extends AbstractAdmin
 {
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
+
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('username', TextType::class);
+        $formMapper
+            ->add('username', TextType::class, ['label' => 'users.labels.nick'])
+            ->add('email', EmailType::class, ['label' => 'users.labels.email'])
+            ->add('password', TextType::class, ['label' => 'users.labels.password']);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -24,6 +38,18 @@ final class UserAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('username');
+        $listMapper
+            ->addIdentifier('username')
+            ->add('email')
+            ->add('_action', null,
+                [
+                    'actions' => [
+                        'show' => [],
+                        'edit' => [],
+                        'delete' => [],
+                    ],
+
+                ]
+            );
     }
 }
