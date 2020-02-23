@@ -2,15 +2,18 @@
 
 {% block body %}
 
-    <h1>Leave your feedback here</h1>
+    <div class="container">
+        <h1>Leave your feedback here</h1>
 
-    {{ form_start(feedback_form) }}
+        {{ form_start(feedback_form) }}
 
         {{ form_row(feedback_form.name) }}
         {{ form_row(feedback_form.email) }}
         {{ form_row(feedback_form.message) }}
 
-    {{ form_end(feedback_form) }}
+        {{ form_end(feedback_form) }}
+    </div>
+
 
 {% endblock body %}
 

@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class UserAdmin extends AbstractAdmin
@@ -26,9 +25,11 @@ final class UserAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('username', TextType::class, ['label' => 'users.labels.nick'])
-            ->add('email', EmailType::class, ['label' => 'users.labels.email'])
-            ->add('password', TextType::class, ['label' => 'users.labels.password']);
+            ->add('is_active', null, ['label' => 'active'])
+            ->add('username', TextType::class, ['label' => 'sonata.users.labels.nick'])
+            ->add('email', EmailType::class, ['label' => 'sonata.users.labels.email'])
+            ->add('date_registered', null, ['label' => 'sonata.users.labels.date_registration'])
+            ->add('password', TextType::class, ['label' => 'sonata.users.labels.password']);
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -39,10 +40,12 @@ final class UserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('username')
-            ->add('email')
+            ->addIdentifier('username', TextType::class, ['label' => 'sonata.users.labels.nick'])
+            ->add('email', EmailType::class, ['label' => 'sonata.users.labels.email'])
+            ->add('date_registered', null, ['label' => 'sonata.users.labels.date_registration'])
             ->add('_action', null,
                 [
+                    'label' => 'Действия',
                     'actions' => [
                         'show' => [],
                         'edit' => [],
