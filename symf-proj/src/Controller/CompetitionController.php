@@ -31,6 +31,7 @@ class CompetitionController extends AbstractController
      * CompetitionController constructor.
      * @param LoggerInterface $logger
      * @param CompetitionRepository $competitionRepository
+     * @param BeatRepository $beatRepository
      */
     public function __construct(LoggerInterface $logger,
                                 CompetitionRepository $competitionRepository,
@@ -71,9 +72,12 @@ class CompetitionController extends AbstractController
             $this->logger->error('Не найдено соревнование с id ' . $competitionId);
         }
 
+        $beatsGroups = array_chunk($beats, 3, true);
+
         return $this->render('@TwigTemplate/competition/detail.html.twig', [
             'competition' => $competition,
-            'beats' => $beats
+            'beats' => $beats,
+            'beatsGrouped' => $beatsGroups
         ]);
     }
 
