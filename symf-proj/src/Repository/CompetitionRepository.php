@@ -6,6 +6,7 @@ use App\Entity\Competition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Competition|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,6 +33,11 @@ class CompetitionRepository extends ServiceEntityRepository
             ->setParameter('link', $link)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getFindAllQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('c');
     }
 
     // /**
