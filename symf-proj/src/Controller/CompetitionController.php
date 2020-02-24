@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\BeatRepository;
 use App\Repository\CompetitionRepository;
 use App\Service\CompetitionGenerator;
+use Knp\Component\Pager\PaginatorInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,33 +26,52 @@ class CompetitionController extends AbstractController
      */
     private CompetitionRepository $competitionRepository;
 
+    /**
+     * @var BeatRepository
+     */
     private BeatRepository $beatRepository;
+
+    /**
+     * @var PaginatorInterface
+     */
+    private PaginatorInterface $paginator;
 
     /**
      * CompetitionController constructor.
      * @param LoggerInterface $logger
      * @param CompetitionRepository $competitionRepository
      * @param BeatRepository $beatRepository
+     * @param PaginatorInterface $paginator
      */
     public function __construct(LoggerInterface $logger,
                                 CompetitionRepository $competitionRepository,
-                                BeatRepository $beatRepository)
+                                BeatRepository $beatRepository,
+                                PaginatorInterface $paginator)
     {
         $this->logger = $logger;
         $this->competitionRepository = $competitionRepository;
         $this->beatRepository = $beatRepository;
+        $this->paginator = $paginator;
     }
 
     /**
      * @Route("/competition", name="competitionList")
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $competitionsList = $this->competitionRepository->findAll();
+        $c = $this->competitionRepository->getFindAllQueryBuilder();
+
+        $pagination = $this->paginator->paginate(
+            $c,
+            $request->query->getInt('page', 1),
+            5
+        );
 
         return $this->render('@TwigTemplate/competition/index.html.twig', [
-            'competitions' => $competitionsList
+            'competitions' => $competitionsList,
+            'pagination' => $pagination
         ]);
     }
 
