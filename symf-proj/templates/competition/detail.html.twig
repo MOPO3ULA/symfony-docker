@@ -16,20 +16,31 @@
                 <h5 class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <p class="float-left">
-                                {{ competition.title }}
-                            </p>
+                            <a href="{{ competition.sample.userLink }}" target="_blank">
+                                {{ competition.sample.userName }}
+                            </a> - {{ competition.title }}
                         </div>
 
-                        <div class="col-lg-1 text-center">
-                            <a href="javascript:">
-                                <span class="fa fa-play js-btn-play" id="wave-player"></span>
-                            </a>
+                        <div class="buttons big-buttons">
+                            <div class="col-lg-1 col-md-1 text-center">
+                                <a href="{{ competition.sample.file }}" download>
+                                    <i class="fa fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="col-lg-1 col-md-1 text-center">
+                                <a href="javascript:">
+                                    <span class="fa fa-play js-btn-play" id="wave-player"></span>
+                                </a>
+                            </div>
                         </div>
+
                     </div>
                 </h5>
                 <div class="card-body">
                     <div id="waveform"></div>
+                    <div class="float-right">
+                        {{ competition.sample.length }}
+                    </div>
                 </div>
                 <audio controls hidden class="audio">
                     <source src="{{ competition.sample.file }}">
@@ -55,8 +66,8 @@
         </div>
     </section>
 
-    <div class="album py-5 bg-light">
-
+    <div class="jumbotron album py-5 bg-light">
+        {% if (beatsGrouped) %}
             {% for group in beatsGrouped %}
                 <div class="container">
                     <div class="row">
@@ -99,6 +110,13 @@
                     </div>
                 </div>
             {% endfor %}
+        {% else %}
+                <h5 class="text-center">
+                    No beats yet&nbsp;
+                    <i class="em em-slightly_frowning_face" aria-role="presentation"
+                       aria-label="SLIGHTLY FROWNING FACE"></i>
+                </h5>
+        {% endif %}
     </div>
 
     <!-- Modal -->
