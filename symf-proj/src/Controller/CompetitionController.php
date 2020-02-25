@@ -56,15 +56,15 @@ class CompetitionController extends AbstractController
 
     /**
      * @Route("/competition", name="competitionList")
+     * @param Request $request
      * @return Response
      */
     public function index(Request $request): Response
     {
-        $competitionsList = $this->competitionRepository->findAll();
-        $c = $this->competitionRepository->getFindAllQueryBuilder();
+        $competitionsList = $this->competitionRepository->getFindAllQueryBuilder();
 
         $pagination = $this->paginator->paginate(
-            $c,
+            $competitionsList,
             $request->query->getInt('page', 1),
             5
         );
