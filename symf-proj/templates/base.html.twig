@@ -13,6 +13,7 @@
             <link rel="manifest" href="{{ asset('images/favicon/site.webmanifest') }}">
         {% endblock %}
     </head>
+
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <a class="navbar-brand" href="#">Main page</a>
@@ -25,7 +26,7 @@
                     beats:
                     {
                         path: path('beatsList'),
-                        label: 'Beats list'
+                        label: 'Beats'
                     },
                     categories:
                     {
@@ -37,15 +38,10 @@
                         path: path('genresList'),
                         label: 'Genres'
                     },
-                    feedback:
-                    {
-                        path: path('feedbackForm'),
-                        label: 'Feedback'
-                    },
                     competition:
                     {
                         path: path('competitionList'),
-                        label: 'Competition'
+                        label: 'Competitions'
                     },
                 },
                 auth:
@@ -90,4 +86,18 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </body>
+
+    <footer class="footer">
+        <div class="container-footer">
+            <div class="copyright">
+                <p>&copy 2020 - Beat Competitions</p>
+            </div>
+            <div class="social">
+                <a href="{{ path('feedbackForm') }}" class="feedback">Feedback</a>
+                <a href="#" class="face">f</a>
+                <a href="#" class="tweet">t</a>
+                <a href="#" class="linked">in</a>
+            </div>
+        </div>
+    </footer>
 </html>

@@ -37,7 +37,8 @@ class CompetitionRepository extends ServiceEntityRepository
 
     public function getFindAllQueryBuilder(): QueryBuilder
     {
-        return $this->createQueryBuilder('c');
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.startDate', 'DESC');
     }
 
     // /**

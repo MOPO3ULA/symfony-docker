@@ -8,29 +8,37 @@
                 <h5 class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <a class="float-left" href="{{ path('competition_detail', {id: competition.id}) }}">
-                                {{ competition.title }}
-                            </a>
+                            <div class="float-left">
+                                <a href="{{ competition.sample.userLink }}" target="_blank">
+                                    {{ competition.sample.userName }}
+                                </a> -
+
+                                <a href="{{ path('competition_detail', {id: competition.id}) }}">
+                                    {{ competition.title }}
+                                </a>
+                            </div>
                         </div>
 
-                        <div class="col-lg-1 text-center">
+                        <div class="col-lg-1 col-md-1 text-center">
+                            <a href="{{ competition.sample.file }}" download>
+                                <i class="fa fa-download"></i>
+                            </a>
+                        </div>
+                        <div class="col-lg-1 col-md-1 text-center">
                             <a href="javascript:">
                                 <span class="fa fa-play js-btn-play" id="wave-player-{{ loop.index }}"></span>
                             </a>
                         </div>
+
                     </div>
                 </h5>
                 <div class="card-body">
                     <div id="waveform-{{ loop.index }}"></div>
+                    <div class="float-right">
+                        {{ competition.sample.length }}
+                    </div>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Author:
-                        <a href="{{ competition.sample.userLink }}" target="_blank">
-                            {{ competition.sample.userName }}
-                        </a>
-                    </li>
-                    <li class="list-group-item">Beat length: {{ competition.sample.length }}</li>
-
                     {% if competition.sample.category %}
                         <li class="list-group-item">Category:
                             <a href="{{ path('categoryDetail', {id: competition.sample.category.id}) }}">
