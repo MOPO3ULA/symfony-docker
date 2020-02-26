@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\BeatRepository;
 use App\Repository\CompetitionRepository;
 use App\Service\CompetitionGenerator;
+use App\Service\UserBeat;
 use Knp\Component\Pager\PaginatorInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -104,15 +105,15 @@ class CompetitionController extends AbstractController
     /**
      * @Route("/competition/submit", name="competitionSubmit")
      * @param Request $request
-     * @param CompetitionGenerator $competitionGenerator
+     * @param UserBeat $userBeat
      * @return Response
      */
-    public function submitBeat(Request $request, CompetitionGenerator $competitionGenerator): ?Response
+    public function submitBeat(Request $request, UserBeat $userBeat): ?Response
     {
         $status = 'success';
         $errorMessage = '';
 
-        $success = $competitionGenerator->saveUserBeat($request);
+        $success = $userBeat->saveUserBeat($request);
 
         if (is_string($success)) {
             $status = 'error';
