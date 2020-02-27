@@ -82,7 +82,7 @@ class Beat
         $this->competition = $competition;
     }
 
-    public function getGenre(): Genre
+    public function getGenre(): ?Genre
     {
         return $this->genre;
     }
@@ -178,7 +178,7 @@ class Beat
         return $this;
     }
 
-    public function getCategory(): Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }

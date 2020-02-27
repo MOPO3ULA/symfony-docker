@@ -7,17 +7,22 @@ body {
     text-align: center;
 }
 
-#wave-player {
-    font-size: 36px;
-    color: #0f6674;
-}
-
 .is-hidden {
     display: none;
 }
 
 .container {
+    min-height: 100vh;
     max-width: 960px;
+}
+
+.container-footer {
+    max-width: 960px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 /*
@@ -117,4 +122,16 @@ body {
 
 .emoji-detail {
     margin-top: 1rem;
+}
+
+.fa-download {
+    color: #2c4762;
+}
+
+.fa {
+    text-underline-mode: none;
+}
+
+.big-buttons {
+    display: contents;
 }

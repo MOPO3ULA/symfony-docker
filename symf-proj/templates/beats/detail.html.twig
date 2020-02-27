@@ -12,17 +12,21 @@
         <li>Title: {{ beat.getTitle() }}</li>
         <li>Beat length: {{ beat.getBeatLength() }}</li>
 
-        <li>Category:
-            <a href="{{ path('categoryDetail', {id: beat.category.id}) }}">
-                {{ beat.getCategory().getName() }}
-            </a>
-        </li>
+        {% if (beat.category) %}
+            <li>Category:
+                <a href="{{ path('categoryDetail', {id: beat.category.id}) }}">
+                    {{ beat.getCategory().getName() }}
+                </a>
+            </li>
+        {% endif %}
 
-        <li>Genre:
-            <a href="{{ path('genreDetail', {id: beat.genre.id}) }}">
-                {{ beat.genre.name }}
-            </a>
-        </li>
+        {% if (beat.genre) %}
+            <li>Genre:
+                <a href="{{ path('genreDetail', {id: beat.genre.id}) }}">
+                    {{ beat.genre.name }}
+                </a>
+            </li>
+        {% endif %}
 
         {% if beat.rating %}
             <li>Rating: {{ beat.getRating() }}</li>

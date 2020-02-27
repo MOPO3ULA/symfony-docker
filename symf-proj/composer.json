@@ -12,6 +12,7 @@
         "doctrine/annotations": "^1.8",
         "doctrine/doctrine-bundle": "^2.0",
         "guzzlehttp/guzzle": "^6.4",
+        "knplabs/knp-paginator-bundle": "^5.1",
         "paquettg/php-html-parser": "^2.2",
         "sonata-project/admin-bundle": "^3.59",
         "sonata-project/doctrine-orm-admin-bundle": "^3.14",

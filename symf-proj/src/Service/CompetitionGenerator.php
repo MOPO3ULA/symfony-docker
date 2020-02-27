@@ -154,7 +154,7 @@ class CompetitionGenerator
 
         $fullPath = $saveDestination . $originalFilename;
         $mp3 = new Mp3Info($fullPath);
-        $mp3Length = $mp3->getDuration();
+        $mp3Length = $mp3->getDurationFormatted();
 
         $beat->setTitle($request->request->get('title'));
         $beat->setDescription($request->request->get('description'));

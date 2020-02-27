@@ -158,11 +158,17 @@
     "knplabs/gaufrette": {
         "version": "v0.9.0"
     },
+    "knplabs/knp-components": {
+        "version": "v2.3.2"
+    },
     "knplabs/knp-menu": {
         "version": "2.6.0"
     },
     "knplabs/knp-menu-bundle": {
         "version": "v2.3.0"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v5.1.1"
     },
     "kriswallsmith/buzz": {
         "version": "v0.16.1"

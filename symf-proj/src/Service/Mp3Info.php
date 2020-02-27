@@ -59,6 +59,21 @@ class Mp3Info
         return round($duration);
     }
 
+    /**
+     * Принимает число/строку в секундах, а возвращает строку в формате "01:25"
+     * @param bool $use_cbr_estimate
+     * @return string
+     */
+    public function getDurationFormatted($use_cbr_estimate = false): string
+    {
+        $duration = $this->getDuration($use_cbr_estimate);
+
+        $mp3LengthMin = floor($duration / 60);
+        $mp3LengthSec = $duration - (60 * $mp3LengthMin);
+
+        return sprintf('%02d:%02d', $mp3LengthMin, $mp3LengthSec);
+    }
+
     private function estimateDuration($bitrate, $offset)
     {
         $kbps = ($bitrate * 1000) / 8;
