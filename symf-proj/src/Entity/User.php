@@ -50,6 +50,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $user_photo;
     
     public function __construct() 
     {
@@ -181,5 +186,17 @@ class User implements UserInterface
     public function setDateRegistered($date_registered): void
     {
         $this->date_registered = $date_registered;
+    }
+
+    public function getUserPhoto(): ?string
+    {
+        return $this->user_photo;
+    }
+
+    public function setUserPhoto(?string $user_photo): self
+    {
+        $this->user_photo = $user_photo;
+
+        return $this;
     }
 }
