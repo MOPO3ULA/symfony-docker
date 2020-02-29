@@ -3,13 +3,18 @@
 {% block body %}
 
     <h1>Genres</h1>
+
+    {% set vars = [] %}
     {% for genre in genres %}
-        <p>
-            <a href="{{ path('genreDetail', {id: genre.id }) }}">
-                {{ genre.name }} ({{ genre.count }})
-            </a>
-        </p>
+        {% set vars = vars|merge([{
+            'obj': genre,
+            'link': path('genreDetail', {id: genre.id})
+        }]) %}
     {% endfor %}
+
+    {% include '@TwigTemplate/main/index_count_lists/list/list.html.twig' with {
+        items: vars
+    } %}
 
 {% endblock body %}
 
