@@ -3,7 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Beat;
+use App\Entity\User;
 use App\Repository\CompetitionRepository;
+use App\Repository\UserRepository;
 use App\Validate\FileValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -43,6 +45,8 @@ class UserBeat
      */
     private LoggerInterface $logger;
 
+    private array $errors;
+
     /**
      * @var Beat $beat
      */
@@ -50,7 +54,7 @@ class UserBeat
 
     public function __construct(ManagerRegistry $managerRegistry,
                                 EntityManagerInterface $em, ParameterBagInterface $parameterBag,
-                                Security $security, LoggerInterface $logger)
+                                Security $security, LoggerInterface $logger, UserRepository $userRepository)
     {
         $this->em = $em;
         $this->parameterBag = $parameterBag;
@@ -62,9 +66,21 @@ class UserBeat
          */
         $competitionRepository = $managerRegistry->getRepository(Competition::class);
         $this->competitionRepository = $competitionRepository;
-
         $this->beat = new Beat();
-        $this->beat->setUser($security->getUser());
+
+        /**
+         * @var User|null $user
+         */
+        $user = $security->getUser();
+
+        if ($user) {
+            $userId = $user->getId();
+            $userObj = $userRepository->find($userId);
+
+            $this->beat->setUser($userObj);
+        } else {
+            $this->errors[] = 'Anonymous user';
+        }
     }
 
     /**
@@ -73,6 +89,11 @@ class UserBeat
      */
     public function saveUserBeat(Request $request)
     {
+        if ($this->errors) {
+            $this->logger->error($this->errors[0], ['class' => static::class]);
+            return false;
+        }
+
         /**
          * @var UploadedFile $file
          */

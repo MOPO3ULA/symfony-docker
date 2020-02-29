@@ -49,8 +49,10 @@
 
             <p>
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <a class="btn btn-outline-success my-2" data-toggle="modal"
-                       data-target="#modal-submit">Join competition</a>
+                    {% if not isCompetitionFound %}
+                        <a class="btn btn-outline-success my-2" data-toggle="modal"
+                           data-target="#modal-submit">Join competition</a>
+                    {% endif %}
                 {% else %}
                     <a type="button" href="{{ path('app_register') }}" class="btn btn-outline-success">
                         Sign up to join

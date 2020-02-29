@@ -22,11 +22,6 @@ class Beat
     private $title;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     */
-    private $user;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $rating;
@@ -65,6 +60,16 @@ class Beat
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $picture;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Sample", inversedBy="beat")
+     */
+    private $sample;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="beats")
+     */
+    private $user;
 
     /**
      * @return mixed
@@ -107,25 +112,6 @@ class Beat
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     * @return Beat
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -198,6 +184,30 @@ class Beat
     public function setPicture(string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getSample(): ?Sample
+    {
+        return $this->sample;
+    }
+
+    public function setSample(?Sample $sample): self
+    {
+        $this->sample = $sample;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
