@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,11 +52,17 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $username;
-    
-    public function __construct() 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Beat", mappedBy="user")
+     */
+    private $beats;
+
+    public function __construct()
     {
         $this->is_active = true;
         $this->date_registered = new \DateTime('now');
+        $this->beats = new ArrayCollection();
     }
 
     /**
@@ -92,7 +100,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     /**
@@ -119,7 +127,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -181,5 +189,36 @@ class User implements UserInterface
     public function setDateRegistered($date_registered): void
     {
         $this->date_registered = $date_registered;
+    }
+
+    /**
+     * @return Collection|Beat[]
+     */
+    public function getBeats(): Collection
+    {
+        return $this->beats;
+    }
+
+    public function addBeat(Beat $beat): self
+    {
+        if (!$this->beats->contains($beat)) {
+            $this->beats[] = $beat;
+            $beat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeat(Beat $beat): self
+    {
+        if ($this->beats->contains($beat)) {
+            $this->beats->removeElement($beat);
+            // set the owning side to null (unless already changed)
+            if ($beat->getUser() === $this) {
+                $beat->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -2,15 +2,12 @@
 
 namespace App\Service;
 
-use App\Entity\Beat;
 use App\Entity\Category;
 use App\Entity\Genre;
 use App\Entity\Sample;
 use App\Parse\CompetitionParser;
 use App\Repository\CategoryRepository;
-use App\Repository\CompetitionRepository;
 use App\Repository\GenreRepository;
-use App\Validate\FileValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,9 +17,6 @@ use Exception;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Throwable;
 
 class CompetitionGenerator
@@ -53,11 +47,6 @@ class CompetitionGenerator
     private CategoryRepository $categoryRepository;
 
     /**
-     * @var CompetitionRepository $competitionRepository
-     */
-    private CompetitionRepository $competitionRepository;
-
-    /**
      * @var GenreRepository $genreRepository
      */
     private GenreRepository $genreRepository;
@@ -71,11 +60,6 @@ class CompetitionGenerator
      * @var ParameterBagInterface $parameterBag
      */
     private ParameterBagInterface $parameterBag;
-
-    /**
-     * @var Security $security
-     */
-    private Security $security;
 
     /**
      * @var LoggerInterface $logger
@@ -100,99 +84,14 @@ class CompetitionGenerator
 
     public function __construct(ManagerRegistry $managerRegistry, CompetitionParser $crawler,
                                 EntityManagerInterface $em, File $file, ParameterBagInterface $parameterBag,
-                                Security $security, LoggerInterface $logger)
+                                LoggerInterface $logger)
     {
         $this->managerRegistry = $managerRegistry;
         $this->crawler = $crawler;
         $this->em = $em;
         $this->file = $file;
         $this->parameterBag = $parameterBag;
-        $this->security = $security;
         $this->logger = $logger;
-
-        /**
-         * @var CompetitionRepository $competitionRepository
-         */
-        $competitionRepository = $this->managerRegistry->getRepository(Competition::class);
-        $this->competitionRepository = $competitionRepository;
-    }
-
-    /**
-     * @param Request $request
-     * @return bool|string
-     */
-    public function saveUserBeat(Request $request)
-    {
-        $beat = new Beat();
-        $beat->setUser($this->security->getUser());
-
-        /**
-         * @var UploadedFile $file
-         */
-        $file = $request->files->get('file');
-
-        /**
-         * @var UploadedFile $picture
-         */
-        $picture = $request->files->get('picture');
-
-        $validationResult = FileValidator::validateMp3($file);
-
-        if (is_string($validationResult)) {
-            $this->logger->error($validationResult, ['class' => static::class]);
-            return $validationResult;
-        }
-
-        $saveDestination = $this->parameterBag->get('kernel.project_dir') . '/public/upload/beats/';
-        $saveDestinationPicture = $this->parameterBag->get('kernel.project_dir') . '/public/upload/images/beats';
-
-        $originalFilename = $file->getClientOriginalName();
-        $originalPictureName = $picture->getClientOriginalName();
-
-        $file->move($saveDestination, $originalFilename);
-        $picture->move($saveDestinationPicture, $originalPictureName);
-
-        $fullPath = $saveDestination . $originalFilename;
-        $mp3 = new Mp3Info($fullPath);
-        $mp3Length = $mp3->getDurationFormatted();
-
-        $beat->setTitle($request->request->get('title'));
-        $beat->setDescription($request->request->get('description'));
-        $beat->setBeatLength($mp3Length);
-        $beat->setFileUrl('/upload/samples/' . $originalFilename);
-        $beat->setPicture('/upload/images/beats/' . $originalPictureName);
-
-        $postLink = $request->request->get('postLink');
-
-        try {
-            /**
-             * @var Competition $competition
-             */
-            $competition = $this->competitionRepository->findCompetitionByPostLink($postLink);
-
-            $sample = $competition->getSample();
-
-            $category = $sample->getCategory();
-            $genre = $sample->getGenre();
-
-            $beat->setCategory($category);
-            $beat->setGenre($genre);
-        } catch (NonUniqueResultException $e) {
-            $this->logger->error($e->getMessage(), [$e->getTraceAsString()]);
-            return false;
-        }
-
-        $beat->setCompetition($competition);
-
-        try {
-            $this->em->persist($beat);
-            $this->em->flush();
-        } catch (Throwable $exception) {
-            $this->logger->error('Ошибка записи Beat в базу', ['class' => static::class]);
-            return false;
-        }
-
-        return true;
     }
 
     public function createCompetition()

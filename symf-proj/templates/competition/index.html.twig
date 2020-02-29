@@ -59,10 +59,12 @@
                     {% endif %}
                     <li class="list-group-item">
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                            <a type="button" href="#" class="btn btn-outline-success"
-                               data-toggle="modal" data-target="#modal-submit-{{ loop.index }}">
-                                Join competition
-                            </a>
+                            {% if competition.id not in userCompetitionIds  %}
+                                <a type="button" href="#" class="btn btn-outline-success"
+                                   data-toggle="modal" data-target="#modal-submit-{{ loop.index }}">
+                                    Join competition
+                                </a>
+                            {% endif %}
                         {% else %}
                             <a type="button" href="{{ path('app_register') }}" class="btn btn-outline-success">
                                 Sign up to join
