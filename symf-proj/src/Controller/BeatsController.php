@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Beat;
 use App\Repository\BeatRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,17 +13,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class BeatsController extends AbstractController
 {
     /**
+     * @var PaginatorInterface $paginator
+     */
+    private PaginatorInterface $paginator;
+
+    public function __construct(PaginatorInterface $paginator)
+    {
+        $this->paginator = $paginator;
+    }
+
+    /**
      * @Route("/beats", name="beatsList")
+     * @param Request $request
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         /*** @var BeatRepository $beatsRepository */
         $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
-        $beatsList = $beatsRepository->findAll();
+        $beatsListQB = $beatsRepository->getFindAllQueryBuilder();
+
+        $pagination = $this->paginator->paginate(
+            $beatsListQB,
+            $request->query->getInt('page', 1),
+            5
+        );
 
         return $this->render('@TwigTemplate/beats/index.html.twig', [
-            'beats' => $beatsList
+            'beats' => $pagination
         ]);
     }
 

@@ -4,17 +4,77 @@
 
     <h1>Beats list</h1>
     {% for beat in beats %}
-        <p>
-            <a href="{{ path('beatsDetail', {id: beat.id }) }}">
-                {{ beat.title }}
-            </a>
-            by
-            <a href="{{ path('detailUser', {'username': beat.user.username}) }}">
-                <b>{{ beat.user.username }}</b>
-            </a>
-        </p>
+        <div class="card sample" id="beat-{{ loop.index }}">
+            <h5 class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="float-left">
+                            <a href="{{ beat.fileUrl }}" target="_blank">
+                                {{ beat.user.username }}
+                            </a> -
+
+                            <a href="{{ path('beatsDetail', {id: beat.id }) }}">
+                                {{ beat.title }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1 col-md-1 text-center">
+                        <a href="{{ beat.fileUrl }}" download>
+                            <i class="fa fa-download"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg-1 col-md-1 text-center">
+                        <a href="javascript:">
+                            <span class="fa fa-play js-btn-play" id="wave-player-{{ loop.index }}"></span>
+                        </a>
+                    </div>
+
+                </div>
+            </h5>
+            <div class="card-body">
+                <div id="waveform-{{ loop.index }}"></div>
+                <div class="float-right">
+                    {{ beat.beatLength }}
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% if beat.category %}
+                    <li class="list-group-item">Category:
+                        <a href="{{ path('categoryDetail', {id: beat.category.id}) }}">
+                            {{ beat.category.name }}
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if beat.genre %}
+                    <li class="list-group-item">Genre:
+                        <a href="{{ path('genreDetail', {id: beat.genre.id}) }}">
+                            {{ beat.genre.name }}
+                        </a>
+                    </li>
+                {% endif %}
+                {% if beat.description %}
+                    <li class="list-group-item">Description: {{ beat.description }}</li>
+                {% endif %}
+                <li class="list-group-item">
+                    <a type="button" href="{{ path('beatsDetail', {id: beat.id}) }}" class="btn btn-outline-info">
+                        More
+                    </a>
+                </li>
+
+                <audio controls hidden class="audio">
+                    <source src="{{ beat.fileUrl }}">
+                </audio>
+            </ul>
+        </div>
     {% endfor %}
+    {{ knp_pagination_render(beats) }}
 
 {% endblock body %}
 
 {% block title %}Beats list{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app_beats') }}
+{% endblock %}

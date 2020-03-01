@@ -65,6 +65,12 @@ class BeatRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getFindAllQueryBuilder()
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.id', 'DESC');
+    }
+
     // /**
     //  * @return Beat[] Returns an array of Beat objects
     //  */
