@@ -82,22 +82,23 @@
             {% block body %}{% endblock %}
         </main>
 
+        <footer class="footer">
+            <div class="container-footer">
+                <div class="copyright">
+                    <p>&copy 2020 - Beat Competitions</p>
+                </div>
+                <div class="social">
+                    <a href="{{ path('feedbackForm') }}" class="feedback">Feedback</a>
+                    <a href="#" class="face">f</a>
+                    <a href="#" class="tweet">t</a>
+                    <a href="#" class="linked">in</a>
+                </div>
+            </div>
+        </footer>
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </body>
 
-    <footer class="footer">
-        <div class="container-footer">
-            <div class="copyright">
-                <p>&copy 2020 - Beat Competitions</p>
-            </div>
-            <div class="social">
-                <a href="{{ path('feedbackForm') }}" class="feedback">Feedback</a>
-                <a href="#" class="face">f</a>
-                <a href="#" class="tweet">t</a>
-                <a href="#" class="linked">in</a>
-            </div>
-        </div>
-    </footer>
 </html>
