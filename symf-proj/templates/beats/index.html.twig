@@ -9,7 +9,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <div class="float-left">
-                            <a href="{{ beat.fileUrl }}" target="_blank">
+                            <a href="{{ path('detailUser', {'username': beat.user.username}) }}" target="_blank">
                                 {{ beat.user.username }}
                             </a> -
 
@@ -57,11 +57,6 @@
                 {% if beat.description %}
                     <li class="list-group-item">Description: {{ beat.description }}</li>
                 {% endif %}
-                <li class="list-group-item">
-                    <a type="button" href="{{ path('beatsDetail', {id: beat.id}) }}" class="btn btn-outline-info">
-                        More
-                    </a>
-                </li>
 
                 <audio controls hidden class="audio">
                     <source src="{{ beat.fileUrl }}">
