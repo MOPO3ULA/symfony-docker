@@ -17,9 +17,15 @@ class BeatsController extends AbstractController
      */
     private PaginatorInterface $paginator;
 
-    public function __construct(PaginatorInterface $paginator)
+    /**
+     * @var BeatRepository $beatRepository
+     */
+    private BeatRepository $beatRepository;
+
+    public function __construct(PaginatorInterface $paginator, BeatRepository $beatRepository)
     {
         $this->paginator = $paginator;
+        $this->beatRepository = $beatRepository;
     }
 
     /**
@@ -29,9 +35,7 @@ class BeatsController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        /*** @var BeatRepository $beatsRepository */
-        $beatsRepository = $this->getDoctrine()->getRepository(Beat::class);
-        $beatsListQB = $beatsRepository->getFindAllQueryBuilder();
+        $beatsListQB = $this->beatRepository->getFindAllQueryBuilder();
 
         $pagination = $this->paginator->paginate(
             $beatsListQB,
