@@ -136,3 +136,7 @@ body {
 .big-buttons {
     display: contents;
 }
+
+.track-time {
+    text-align: right;
+}

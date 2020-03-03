@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateInterval;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +49,11 @@ class Competition
      * @ORM\Column(type="string", nullable=false)
      */
     private $loopermanLink;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $rating;
 
     /**
      * @return string
@@ -94,6 +100,7 @@ class Competition
 
         $startDate = clone $this->startDate;
         $this->endDate = $startDate->add(new DateInterval('P2D'));
+        $this->rating = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +152,18 @@ class Competition
     public function setEndDate(DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getRating(): ?string
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?string $rating): self
+    {
+        $this->rating = $rating;
 
         return $this;
     }

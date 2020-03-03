@@ -34,11 +34,18 @@
                 </h5>
                 <div class="card-body">
                     <div id="waveform-{{ loop.index }}"></div>
-                    <div class="float-right">
+                    <div class="float-right col-md-4 col-lg-4 col-sm-2 track-time">
                         {{ competition.sample.length }}
                     </div>
                 </div>
                 <ul class="list-group list-group-flush">
+
+                    {% if competition.rating %}
+                        <li class="list-group-item">
+                            Rating: {{ competition.rating }}/100
+                        </li>
+                    {% endif %}
+
                     {% if competition.sample.category %}
                         <li class="list-group-item">Category:
                             <a href="{{ path('categoryDetail', {id: competition.sample.category.id}) }}">
