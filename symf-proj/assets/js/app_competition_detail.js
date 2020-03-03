@@ -12,3 +12,4 @@ window.$ = $;
 window.jQuery = $;
 
 require('./competition_detail.js');
+require('./rating.js');

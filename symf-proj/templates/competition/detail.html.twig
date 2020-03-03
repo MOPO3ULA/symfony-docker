@@ -65,6 +65,19 @@
             </p>
             <i class="em em-musical_note emoji-detail" aria-label="MUSICAL NOTE"></i>
 
+            <div>
+                <a class="h2" id="vote-down" href="javascript:">-</a>
+                <a class="h2" id="vote-up" href="javascript:">+</a>
+            </div>
+
+            {% if competition.rating %}
+                <div>
+                    <p>
+                        Rating: {{ competition.rating }}/100
+                    </p>
+                </div>
+            {% endif %}
+
         </div>
     </section>
 
