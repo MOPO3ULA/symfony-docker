@@ -9,5 +9,6 @@ make start
 
 cd symf-proj/
 composer update
+yarn encore dev
 
 rm -rf var/cache/dev
