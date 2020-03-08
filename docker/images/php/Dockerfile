@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
     && pecl install mcrypt-1.0.3 \
     && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip opcache \
     && docker-php-ext-enable mcrypt opcache \
-    && docker-php-ext-configure gd
+    && docker-php-ext-configure gd \
+    && docker-php-ext-install -j$(nproc) gd
 
 RUN echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/php.ini \
     && echo 'opcache.interned_strings_buffer=8' >> /usr/local/etc/php/php.ini \
