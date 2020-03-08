@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -75,6 +77,21 @@ class Sample
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $size;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Beat", mappedBy="sample")
+     */
+    private $beat;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Competition", cascade={"persist", "remove"})
+     */
+    private $competition;
+
+    public function __construct()
+    {
+        $this->beat = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -242,5 +259,48 @@ class Sample
     public function __toString(): string
     {
         return $this->title;
+    }
+
+    /**
+     * @return Collection|Beat[]
+     */
+    public function getBeat(): Collection
+    {
+        return $this->beat;
+    }
+
+    public function addBeat(Beat $beat): self
+    {
+        if (!$this->beat->contains($beat)) {
+            $this->beat[] = $beat;
+            $beat->setSample($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeat(Beat $beat): self
+    {
+        if ($this->beat->contains($beat)) {
+            $this->beat->removeElement($beat);
+            // set the owning side to null (unless already changed)
+            if ($beat->getSample() === $this) {
+                $beat->setSample(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCompetition(): ?Competition
+    {
+        return $this->competition;
+    }
+
+    public function setCompetition(?Competition $competition): self
+    {
+        $this->competition = $competition;
+
+        return $this;
     }
 }

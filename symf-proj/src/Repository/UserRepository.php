@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Beat;
+use App\Entity\Competition;
+use App\Entity\Sample;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -39,8 +41,39 @@ class UserRepository extends ServiceEntityRepository
             ->groupBy('b.title')
             ->addGroupBy('b.id')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+    }
+
+    public function findUserCompetitions(User $user)
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb
+            ->select('c.id')
+            ->leftJoin(Beat::class, 'b', Join::WITH, 'b.user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->leftJoin(Sample::class, 's', Join::WITH, 'b.sample = s.id')
+            ->leftJoin(Competition::class, 'c', Join::WITH, 's.competition = c.id')
+            ->where($qb->expr()->isNotNull('s.competition'))
+            ->groupBy('c.id')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findUserCompetitionById(User $user, $id)
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb
+            ->select('c.id')
+            ->leftJoin(Beat::class, 'b', Join::WITH, 'b.user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->leftJoin(Sample::class, 's', Join::WITH, 'b.sample = s.id')
+            ->leftJoin(Competition::class, 'c', Join::WITH, 's.competition = c.id')
+            ->where($qb->expr()->isNotNull('s.competition'))
+            ->andWhere('c.id = :competitionId')
+            ->setParameter('competitionId', $id)
+            ->groupBy('c.id')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -55,8 +88,7 @@ class UserRepository extends ServiceEntityRepository
             ->where('u.username = :username')
             ->setParameter('username', $username)
             ->getQuery()
-            ->getSingleResult()
-        ;
+            ->getSingleResult();
     }
 
     /**

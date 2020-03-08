@@ -49,8 +49,10 @@
 
             <p>
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <a class="btn btn-outline-success my-2" data-toggle="modal"
-                       data-target="#modal-submit">Join competition</a>
+                    {% if not isCompetitionFound %}
+                        <a class="btn btn-outline-success my-2" data-toggle="modal"
+                           data-target="#modal-submit">Join competition</a>
+                    {% endif %}
                 {% else %}
                     <a type="button" href="{{ path('app_register') }}" class="btn btn-outline-success">
                         Sign up to join
@@ -62,6 +64,19 @@
                 </a>
             </p>
             <i class="em em-musical_note emoji-detail" aria-label="MUSICAL NOTE"></i>
+
+            <div>
+                <a class="h2" id="vote-down" href="javascript:">-</a>
+                <a class="h2" id="vote-up" href="javascript:">+</a>
+            </div>
+
+            {% if competition.rating %}
+                <div>
+                    <p>
+                        Rating: {{ competition.rating }}/100
+                    </p>
+                </div>
+            {% endif %}
 
         </div>
     </section>

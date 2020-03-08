@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Repository\BeatRepository;
 use App\Repository\CompetitionRepository;
 use App\Service\CompetitionGenerator;
+use App\Service\UserBeat;
+use App\Service\UserCompetition;
 use Knp\Component\Pager\PaginatorInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,21 +39,29 @@ class CompetitionController extends AbstractController
     private PaginatorInterface $paginator;
 
     /**
+     * @var UserCompetition $userCompetition
+     */
+    private UserCompetition $userCompetition;
+
+    /**
      * CompetitionController constructor.
      * @param LoggerInterface $logger
      * @param CompetitionRepository $competitionRepository
      * @param BeatRepository $beatRepository
      * @param PaginatorInterface $paginator
+     * @param UserCompetition $userCompetition
      */
     public function __construct(LoggerInterface $logger,
                                 CompetitionRepository $competitionRepository,
                                 BeatRepository $beatRepository,
-                                PaginatorInterface $paginator)
+                                PaginatorInterface $paginator,
+                                UserCompetition $userCompetition)
     {
         $this->logger = $logger;
         $this->competitionRepository = $competitionRepository;
         $this->beatRepository = $beatRepository;
         $this->paginator = $paginator;
+        $this->userCompetition = $userCompetition;
     }
 
     /**
@@ -61,6 +71,7 @@ class CompetitionController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        $userCompetitionIds = $this->userCompetition->getUserCompetitionIds();
         $competitionsList = $this->competitionRepository->getFindAllQueryBuilder();
 
         $pagination = $this->paginator->paginate(
@@ -70,8 +81,8 @@ class CompetitionController extends AbstractController
         );
 
         return $this->render('@TwigTemplate/competition/index.html.twig', [
-            'competitions' => $competitionsList,
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'userCompetitionIds' => $userCompetitionIds
         ]);
     }
 
@@ -84,35 +95,36 @@ class CompetitionController extends AbstractController
     {
         $competitionId = $request->get('id');
         $competition = $this->competitionRepository->findOneBy(['id' => $competitionId]);
-        $beats = null;
 
         if ($competition) {
+            $isCompetitionFound = $this->userCompetition->getIsUserCompetitionFound($competitionId);
             $beats = $this->beatRepository->findBy(['competition' => $competition]);
+            $beatsGroups = array_chunk($beats, 3, true);
         } else {
             $this->logger->error('Не найдено соревнование с id ' . $competitionId);
+            throw $this->createNotFoundException('Не найдено соревнование с id ' . $competitionId);
         }
-
-        $beatsGroups = array_chunk($beats, 3, true);
 
         return $this->render('@TwigTemplate/competition/detail.html.twig', [
             'competition' => $competition,
             'beats' => $beats,
-            'beatsGrouped' => $beatsGroups
+            'beatsGrouped' => $beatsGroups,
+            'isCompetitionFound' => $isCompetitionFound
         ]);
     }
 
     /**
      * @Route("/competition/submit", name="competitionSubmit")
      * @param Request $request
-     * @param CompetitionGenerator $competitionGenerator
+     * @param UserBeat $userBeat
      * @return Response
      */
-    public function submitBeat(Request $request, CompetitionGenerator $competitionGenerator): ?Response
+    public function submitBeat(Request $request, UserBeat $userBeat): ?Response
     {
         $status = 'success';
         $errorMessage = '';
 
-        $success = $competitionGenerator->saveUserBeat($request);
+        $success = $userBeat->saveUserBeat($request);
 
         if (is_string($success)) {
             $status = 'error';

@@ -11,5 +11,4 @@ var $ = require('jquery');
 window.$ = $;
 window.jQuery = $;
 
-require('./competition_detail.js');
-require('./rating.js');
+require('./player.js');

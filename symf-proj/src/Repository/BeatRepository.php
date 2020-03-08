@@ -8,6 +8,7 @@ use App\Entity\Genre;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Beat|null find($id, $lockMode = null, $lockVersion = null)
@@ -63,6 +64,12 @@ class BeatRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
+    }
+
+    public function getFindAllQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.id', 'DESC');
     }
 
     // /**
