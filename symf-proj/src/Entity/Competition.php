@@ -100,7 +100,6 @@ class Competition
 
         $startDate = clone $this->startDate;
         $this->endDate = $startDate->add(new DateInterval('P2D'));
-        $this->rating = new ArrayCollection();
     }
 
     public function getId(): ?int
