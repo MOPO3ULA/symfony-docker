@@ -19,6 +19,15 @@ sonata_media:
                 small: { width: 100 , quality: 70}
                 big:   { width: 500 , quality: 70}
 
+        user:
+            providers:
+                - sonata.media.provider.image
+
+            formats:
+                preview: { width: 270 , quality: 95}
+                mini: { width: 85 , quality: 95}
+                desktop: { width: 540 , quality: 95}
+                mobile: { width: 220 , quality: 95}
     cdn:
         server:
             path: /uploads/media

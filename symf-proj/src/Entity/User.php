@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -52,11 +53,14 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\OneToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media", cascade={"persist", "remove"})
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="default")
      */
-    private $user_photo;
-    
-    public function __construct() 
+    private $photo;
+
+
+
+    public function __construct()
     {
         $this->is_active = true;
         $this->date_registered = new \DateTime('now');
@@ -188,15 +192,19 @@ class User implements UserInterface
         $this->date_registered = $date_registered;
     }
 
-    public function getUserPhoto(): ?string
+    /**
+     * @return mixed
+     */
+    public function getPhoto()
     {
-        return $this->user_photo;
+        return $this->photo;
     }
 
-    public function setUserPhoto(?string $user_photo): self
+    /**
+     * @param mixed $photo
+     */
+    public function setPhoto($photo): void
     {
-        $this->user_photo = $user_photo;
-
-        return $this;
+        $this->photo = $photo;
     }
 }
