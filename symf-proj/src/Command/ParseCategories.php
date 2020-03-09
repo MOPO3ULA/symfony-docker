@@ -4,6 +4,7 @@
 namespace App\Command;
 
 
+use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use App\Service\CategoriesParser;
 use Symfony\Component\Console\Command\Command;
@@ -46,5 +47,7 @@ class ParseCategories extends Command
             $this->categoriesParser->run();
             $output->writeln('Parsing and saving categories completed!');
         }
+
+        return 0;
     }
 }

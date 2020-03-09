@@ -46,5 +46,7 @@ class ParseGenres extends Command
             $this->genresParser->run();
             $output->writeln('Parsing and saving genres completed!');
         }
+
+        return 0;
     }
 }
