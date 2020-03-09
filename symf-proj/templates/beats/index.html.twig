@@ -39,6 +39,14 @@
                 </div>
             </div>
             <ul class="list-group list-group-flush">
+                {% if beat.competition %}
+                    <li class="list-group-item">Competition:
+                        <a href="{{ path('categoryDetail', {id: beat.competition.id}) }}">
+                            {{ beat.competition.title }}
+                        </a>
+                    </li>
+                {% endif %}
+
                 {% if beat.category %}
                     <li class="list-group-item">Category:
                         <a href="{{ path('categoryDetail', {id: beat.category.id}) }}">
