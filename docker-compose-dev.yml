@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   db:
+    container_name: ${CONTAINER_PREFIX}_db
     image: mysql:5.7
     command: ["--default-authentication-plugin=mysql_native_password"]
     volumes:
@@ -15,6 +16,7 @@ services:
       - backend
 
   phpmyadmin:
+    container_name: ${CONTAINER_PREFIX}_phpmyadmin
     image: phpmyadmin/phpmyadmin
     restart: always
     ports:
@@ -26,6 +28,7 @@ services:
       - backend
 
   php:
+    container_name: ${CONTAINER_PREFIX}_php
     build: ./docker/images/php
     volumes:
       - app-sync:/var/www/symfony:nocopy
@@ -34,6 +37,7 @@ services:
       - backend
 
   nginx:
+    container_name: ${CONTAINER_PREFIX}_nginx
     build: ./docker/images/nginx
     ports:
       - "8084:80"
