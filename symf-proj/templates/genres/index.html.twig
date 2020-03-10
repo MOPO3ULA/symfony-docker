@@ -6,10 +6,12 @@
 
     {% set vars = [] %}
     {% for genre in genres %}
-        {% set vars = vars|merge([{
-            'obj': genre,
-            'link': path('genreDetail', {id: genre.id})
-        }]) %}
+        {% if genre.count %}
+            {% set vars = vars|merge([{
+                'obj': genre,
+                'link': path('genreDetail', {id: genre.id})
+            }]) %}
+        {% endif %}
     {% endfor %}
 
     {% include '@TwigTemplate/main/index_count_lists/list/list.html.twig' with {
