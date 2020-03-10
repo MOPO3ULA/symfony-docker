@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Beat;
 use App\Entity\Category;
+use App\Entity\Sample;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
@@ -29,12 +29,13 @@ class CategoryRepository extends ServiceEntityRepository
     public function getCategoriesWithCountOfBeats(): array
     {
         $q = $this->createQueryBuilder('c')
-            ->select('count(b.id) AS count')
+            ->select('count(s.id) AS count')
             ->addSelect('c.name')
             ->addSelect('c.id')
-            ->leftJoin(Beat::class, 'b', Join::WITH,
-                'b.category = c.id')
-            ->orderBy('c.name', 'ASC')
+            ->leftJoin(Sample::class, 's', Join::WITH,
+                's.category = c.id')
+            ->orderBy('count', 'DESC')
+            ->addOrderBy('c.name', 'ASC')
             ->groupBy('c.id')
             ->addGroupBy('c.name');
 

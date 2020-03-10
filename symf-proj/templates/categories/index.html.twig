@@ -6,10 +6,12 @@
 
     {% set vars = [] %}
     {% for category in categories %}
-        {% set vars = vars|merge([{
-            'obj': category,
-            'link': path('categoryDetail', {id: category.id})
-        }]) %}
+        {% if category.count %}
+            {% set vars = vars|merge([{
+                'obj': category,
+                'link': path('categoryDetail', {id: category.id})
+            }]) %}
+        {% endif %}
     {% endfor %}
 
     {% include '@TwigTemplate/main/index_count_lists/list/list.html.twig' with {

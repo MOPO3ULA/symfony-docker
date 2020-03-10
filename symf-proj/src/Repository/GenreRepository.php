@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Beat;
 use App\Entity\Genre;
+use App\Entity\Sample;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
@@ -25,12 +25,13 @@ class GenreRepository extends ServiceEntityRepository
     public function getGenresWithCountOfBeats(): array
     {
         $q = $this->createQueryBuilder('g')
-            ->select('count(b.id) AS count')
+            ->select('count(s.id) AS count')
             ->addSelect('g.name')
             ->addSelect('g.id')
-            ->leftJoin(Beat::class, 'b', Join::WITH,
-                'b.category = g.id')
-            ->orderBy('g.name', 'ASC')
+            ->leftJoin(Sample::class, 's', Join::WITH,
+                's.category = g.id')
+            ->orderBy('count', 'DESC')
+            ->addOrderBy('g.name', 'ASC')
             ->groupBy('g.id')
             ->addGroupBy('g.name');
 
