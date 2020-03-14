@@ -5,9 +5,12 @@ if [ `id -u` -eq 0 ]; then
     exit 1
 fi
 
+# Копируем .env
+cp .env.template .env
+
 make start
 
-cd symf-proj/
+cd symf-proj/ || exit
 composer update
 
 rm -rf var/cache/dev

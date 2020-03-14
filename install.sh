@@ -1,8 +1,11 @@
 #!/bin/bash
 
-docker-compose up -d --build
+# Копируем .env
+cp .env.template .env
+
+make up
+
 cd symf-proj || exit
-composer update
 yarn install
 yarn encore dev
 

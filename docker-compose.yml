@@ -10,8 +10,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: symfony4_beats
+      MYSQL_ROOT_PASSWORD: ${DB_USERNAME}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     networks:
       - backend
 
@@ -23,7 +23,7 @@ services:
       - '8081:80'
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     networks:
       - backend
 
