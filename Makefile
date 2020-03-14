@@ -1,5 +1,19 @@
 OS := $(shell uname)
 
+install:
+	@sh install.sh
+
+up:
+	@sh commands/env-up.sh
+
+down:
+ifeq ($(OS),Darwin)
+	docker-compose down
+	docker-sync stop
+else
+	docker-compose stop
+endif
+
 start:
 ifeq ($(OS),Darwin)
 	docker volume create --name=app-sync
@@ -10,12 +24,4 @@ ifeq ($(OS),Darwin)
 else
 	docker-compose up -d
 	docker exec -it symfony-docker_php_1 php bin/console doctrine:schema:update --force
-endif
-
-stop:
-ifeq ($(OS),Darwin)
-	docker-compose down
-	docker-sync stop
-else
-	docker-compose stop
 endif

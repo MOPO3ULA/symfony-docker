@@ -12,3 +12,5 @@
 /.docker-sync/
 ###< symfony/framework-bundle ###
 /symf-proj/composer.lock
+
+.env*
