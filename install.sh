@@ -17,7 +17,7 @@ cd public &&
   mkdir "samples"
   cd ../..
 
-export $(cat .env | xargs)
+export $(grep -v '#' .env | xargs)
 
 #rights and owner of directories and files
 echo 'Меняем пользователя'
