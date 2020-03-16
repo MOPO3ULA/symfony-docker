@@ -6,7 +6,7 @@ if [ `id -u` -eq 0 ]; then
 fi
 
 # Копируем .env
-cp .env.template .env
+#cp .env.template .env
 
 make start
 

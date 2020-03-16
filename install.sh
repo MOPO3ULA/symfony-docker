@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Копируем .env
-cp .env.template .env
+#cp .env.template .env
 
 make up
 
