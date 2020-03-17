@@ -45,7 +45,7 @@ class UserBeat
      */
     private LoggerInterface $logger;
 
-    private array $errors;
+    private ?array $errors = null;
 
     /**
      * @var Beat $beat
